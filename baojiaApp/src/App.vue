@@ -146,7 +146,10 @@ export default {
 .el-table {
   border: none !important;
   overflow: visible !important;
-  border-bottom: 0px solid #eee !important;
+  border-bottom: 1px solid #eee !important;
+}
+.el-table::before{
+  height: 0px !important;
 }
 .el-table--border::after, .el-table--group::after, .el-table::before {
     content: '';

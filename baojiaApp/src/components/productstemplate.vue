@@ -4,19 +4,24 @@
       <span  @click="goToHome" style="cursor: pointer;color:#409EFF">{{this.projectName}}</span>配件列表
       <el-button type="primary" style="float: right;" @click="dialogFormVisible = true">添加配套模版</el-button>
       <el-button style="float: right;margin-right:20px" onclick="exportExcel('#expenditureContractlist')">点击导出</el-button>
-      <el-input v-model="inputData" placeholder="请输入搜索内容" @input="play(inputData)" style="width:200px;float: right;margin-right:0px"></el-input>
+      <el-input v-model="inputData" placeholder="请输入搜索内容" @input="playlist(inputData)" style="width:200px;float: right;margin-right:0px"></el-input>
     </h3>
-    <el-dialog title="添加配件" :visible.sync="dialogFormVisible">
+    <el-dialog title="添加配套模版" :visible.sync="dialogFormVisible">
       <el-form ref="form" :model="form" :rules="rules"  label-width="80px" class="demo-ruleForm">
         <el-form-item label="名称" prop="name">
           <el-button @click="productslistVisible=true" type="primary" style="float:right">添加配件</el-button>
           <el-input v-model="form.name" style="width:76%" ></el-input>
         </el-form-item>
         <div style="margin:20px 0px 30px 80px">
-          <el-table :data="tableData_s" @row-click="handle" border :summary-method="jsondata.getSummaries" id="expenditureContractlist" height='90%' style="width: 100%">
+          <el-table :data="productsformadd" border :summary-method="jsondata.getSummaries" id="expenditureContractlist" height='90%' style="width: 100%">
             <el-table-column prop="name" label="名称"></el-table-column>
             <el-table-column prop="price" label="价格" sortable></el-table-column>
-            <el-table-column prop="company" label="单位" ></el-table-column>
+            <el-table-column prop="productsintnb" label="单位" ></el-table-column>
+            <el-table-column label="操作" >
+              <template slot-scope="scope">
+                <el-button @click="redproducts(scope.$index, productsformadd)" type="text" size="small">删除</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <el-form-item label="分类" prop="class">
@@ -33,7 +38,7 @@
           <el-input type="textarea" v-model="form.content" ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('form')">保存</el-button>
+          <el-button type="primary" @click="submitForm('form')">添加配套模版</el-button>
           <el-button @click="dialogFormVisible = false">取消</el-button>
         </el-form-item>
       </el-form>
@@ -41,28 +46,21 @@
     <el-dialog title="修改" :visible.sync="dialogAddVisible">
       <el-form ref="formModify" :model="formModify" :rules="rules"  label-width="80px" class="demo-ruleForm">
         <el-form-item label="名称" prop="name">
-          <el-input v-model="formModify.name"></el-input>
+          <el-button @click="productslistVisible=true" type="primary" style="float:right">添加配件</el-button>
+          <el-input v-model="formModify.name" style="width:76%" ></el-input>
         </el-form-item>
-        <el-form-item label="品牌" prop="brand">
-          <el-input v-model="formModify.brand" style="width:46%" ></el-input>
-        </el-form-item>
-        <el-form-item label="参数" prop="detail">
-          <el-input type="textarea" v-model="formModify.detail" ></el-input>
-        </el-form-item>
-        <el-form-item label="价格" prop="price">
-          <el-input type="number"  v-model="formModify.price" style="width:46%" ></el-input>
-        </el-form-item>
-        <el-form-item label="日期" prop="date">
-          <el-col :span="11">
-            <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期" v-model="formModify.date" style="width: 100%;"></el-date-picker>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="单位" prop="company">
-            <el-select v-model="formModify.company" placeholder="请选择" style="width:46%" >
-            <el-option label="平米" value="平米"></el-option>
-            <el-option label="单个" value="单个"></el-option>
-            </el-select>
-        </el-form-item>
+        <div style="margin:20px 0px 30px 80px">
+          <el-table :data="productsform" border :summary-method="jsondata.getSummaries" id="expenditureContractlist" height='90%' style="width: 100%">
+            <el-table-column prop="name" label="名称"></el-table-column>
+            <el-table-column prop="price" label="价格" sortable></el-table-column>
+            <el-table-column prop="productsintnb" label="单位" ></el-table-column>
+            <el-table-column label="操作" >
+              <template slot-scope="scope">
+                <el-button @click="redproducts(scope.$index, productsform)" type="text" size="small">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
         <el-form-item label="分类" prop="class">
           <el-cascader
             v-model="formModify.class"
@@ -72,6 +70,7 @@
             filterable
             style="width:46%;">
           </el-cascader>
+          {{this.prodcutstemplateclass}}
         </el-form-item>
         <el-form-item label="备注" prop="content">
           <el-input type="textarea" v-model="formModify.content" ></el-input>
@@ -88,10 +87,9 @@
         title="配件列表"
         :visible.sync="productslistVisible"
         append-to-body>
-          <el-form ref="form" :model="form" :rules="rules"  label-width="80px" class="demo-ruleForm">
+          <el-form ref="form" :rules="rules"  label-width="80px" class="demo-ruleForm">
             <el-form-item label="分类" prop="class" style="width:60%;display: inline-block;">
               <el-cascader
-                v-model="form.class"
                 :options="productsclass"
                 :props="{ expandTrigger: 'hover' }"
                 @change="handleChange"
@@ -101,22 +99,22 @@
               </el-cascader>
             </el-form-item>
             <el-input v-model="inputData" placeholder="请输入搜索内容" @input="play(inputData)" style="width:30%;float: right;margin-right:0px"></el-input>
-          </el-form>
-          <div style="margin:0px 0px 30px 80px">
-            <el-table :data="tableData_s" border :summary-method="jsondata.getSummaries" id="expenditureContractlist" height='90%' style="width: 100%">
-              <el-table-column type="index"></el-table-column>
-              <el-table-column prop="name" label="名称"></el-table-column>
-              <el-table-column prop="detail" label="参数" ></el-table-column>
-              <el-table-column prop="price" label="价格" sortable></el-table-column>
-              <el-table-column prop="company" label="单位" ></el-table-column>
-              <el-table-column prop="class" label="分类" ></el-table-column>
-              <el-table-column prop="" label="操作" >
-                <template slot-scope="scope">
-                  <el-button @click="pushproducts(scope.row)" type="text" size="small">添加</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
+            <div style="margin:0px 0px 30px 80px">
+              <el-table :data="tableData_s" @row-click="pushproducts" border :summary-method="jsondata.getSummaries" id="expenditureContractlist" height='90%' style="width: 100%">
+                <el-table-column type="index"></el-table-column>
+                <el-table-column prop="name" label="名称"></el-table-column>
+                <el-table-column prop="detail" label="参数" ></el-table-column>
+                <el-table-column prop="price" label="价格" sortable></el-table-column>
+                <el-table-column prop="class" label="分类" ></el-table-column>
+                <el-table-column prop="company" label="单位" ></el-table-column>
+                <el-table-column label="操作" >
+                  <template slot-scope="scope">
+                    <el-button @click="pushproducts(scope.row)" type="text" size="small">添加</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+           </el-form>
     </el-dialog>
     <el-dialog
         width="30%"
@@ -126,13 +124,23 @@
         <el-button @click="outerVisible = false">取消</el-button>
         <el-button @click="deletepost">删除</el-button>
     </el-dialog>
-    <el-table :data="tableData_s" @row-click="handle" border :summary-method="jsondata.getSummaries" id="expenditureContractlist" height='90%' style="width: 100%">
+    <el-dialog
+        width="30%"
+        title="添加数量"
+        :visible.sync="productsintbox"
+        append-to-body>
+        <el-form ref="form" :model="productspushdata" :rules="rules"  label-width="80px" style="text-align:center">
+          <br/><br/>
+          <el-form-item :label="productspushdata.name">
+            <el-input type="number" v-model="productsintnb" ></el-input>
+          </el-form-item>
+          <el-button @click="productspushsub" type="primary" >确认</el-button>
+          <el-button @click="productsintbox = false">取消</el-button>
+        </el-form>
+    </el-dialog>
+    <el-table :data="porductsdata_s" @row-click="handle" border :summary-method="jsondata.getSummaries" id="expenditureContractlist" height='90%' style="width: 100%">
       <el-table-column type="index"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="brand" label="品牌" ></el-table-column>
-      <el-table-column prop="detail" label="参数" ></el-table-column>
-      <el-table-column prop="price" label="价格" sortable></el-table-column>
-      <el-table-column prop="company" label="单位" ></el-table-column>
       <el-table-column prop="class" label="分类" ></el-table-column>
       <el-table-column prop="content" label="备注" ></el-table-column>
     </el-table>
@@ -144,16 +152,21 @@
 export default {
   data () {
     return {
+      prodcutstemplateclass: '',
+      productspushdata: {
+      },
+      porductsdata: [],
+      porductsdata_s: [],
+      productsintnb: 1,
+      productsintbox: false,
       productslistVisible: false,
+      productsform: [],
+      productsformadd: [],
       form: {
         name: '',
-        company: '',
-        date: '',
-        content: '',
+        productsid: '',
         class: '',
-        brand: '',
-        detail: '',
-        price: ''
+        content: ''
       },
       productsclassvalue: [],
       productsclass: [{
@@ -357,23 +370,20 @@ export default {
       inputData: '',
       boxvalue: true,
       boxvalue1: false,
-      formbf: [],
+      productsdetail: {
+        name: '',
+        productsid: '',
+        class: '',
+        content: ''
+      },
       projectName: '',
       Customerlist: [],
       tableData: [],
       dialogAddVisible: false,
       dialogFormVisible: false,
-      formModify: {}, // 添加收到金额
+      formModify: {},
       TransactionList: {},
       formTransactionCon: '',
-      formTransactionList: [], // 交易列表
-      formTransaction: { // 交易
-        MoneyClass: '',
-        CollectMoney: '',
-        AmountMoney: '',
-        invoice: '',
-        projectId: this.$route.params.id
-      },
       optionsprojectClass: [],
       optionsOtherParty: [],
       rules: {
@@ -402,10 +412,7 @@ export default {
   methods: {
     handleChange (value) {
       this.inputData = JSON.stringify(value)
-      this.inputData = this.inputData.replace(/"([^"]*)"/g, '$1')
-      this.inputData = this.inputData.replace(/,/g, '/')
-      this.inputData = this.inputData.replace(/\[/g, '')
-      this.inputData = this.inputData.replace(/\]/g, '')
+      this.inputData = this.jsondata.classstrog(this.inputData)
       this.play(this.inputData)
       console.log(this.inputData)
     },
@@ -421,7 +428,8 @@ export default {
     },
     async updatpostData () { // 更新数据
       this.formModify.class = JSON.stringify(this.formModify.class)
-      if (await this.jsondata.updatpostData('products', this.formModify) === 'OK') {
+      this.formModify.productsid = JSON.stringify(this.productsform)
+      if (await this.jsondata.updatpostData('template', this.formModify) === 'OK') {
         this.dialogAddVisible = false
         this.getdata()
       }
@@ -440,23 +448,27 @@ export default {
       this.$refs[formName].resetFields()
     },
     async postData () { // 添加数据
-      console.log(this.form)
       this.form.class = JSON.stringify(this.form.class)
-      if (await this.jsondata.postData('products', this.form) === 'OK') {
+      this.form.productsid = JSON.stringify(this.productsformadd)
+      if (await this.jsondata.postData('template', this.form) === 'OK') {
         this.dialogFormVisible = false
         this.getdata()
-        this.resetForm('form')
+        this.productsformadd = []
       }
+      this.resetForm('form')
     },
     async getdata () {
       this.tableData = await this.jsondata.getData('products')
       for (let i = 0; i < this.tableData.length; i++) {
-        this.tableData[i].class = this.tableData[i].class.replace(/"([^"]*)"/g, '$1')
-        this.tableData[i].class = this.tableData[i].class.replace(/,/g, '/')
-        this.tableData[i].class = this.tableData[i].class.replace(/\[/g, '')
-        this.tableData[i].class = this.tableData[i].class.replace(/\]/g, '')
+        this.tableData[i].productsint = 1
+        this.tableData[i].class = this.jsondata.classstrog(this.tableData[i].class)
+      }
+      this.porductsdata = await this.jsondata.getData('template')
+      for (let i = 0; i < this.porductsdata.length; i++) {
+        this.porductsdata[i].class = this.jsondata.classstrog(this.porductsdata[i].class)
       }
       this.tableData_s = this.tableData
+      this.porductsdata_s = this.porductsdata
     },
     async deletepost () { // 删除
       if (await this.jsondata.deletepost('products', this.formModify.id) === 'OK') {
@@ -467,10 +479,28 @@ export default {
     },
     async handle (row, event, column) { // 点击列表
       this.dialogAddVisible = true
-      this.formModify = await this.jsondata.getDataId('products', row.id)
+      this.prodcutstemplateclass = row.class
+      this.formModify = await this.jsondata.getDataId('template', row.id)
+      this.productsform = JSON.parse(this.formModify.productsid)
+    },
+    redproducts (index, rows) {
+      rows.splice(index, 1)
     },
     pushproducts (row) {
-      console.log(row)
+      this.productsintbox = true
+      this.productsintnb = 1
+      this.productspushdata = row
+    },
+    productspushsub () {
+      this.productspushdata.productsintnb = this.productsintnb
+      if (this.dialogFormVisible) {
+        this.productsformadd.push(this.productspushdata)
+      }
+      if (this.dialogAddVisible) {
+        this.productsform.push(this.productspushdata)
+      }
+      this.productsintbox = false
+      this.productslistVisible = false
     },
     goToHome () {
       this.$router.push('/projectdetails/' + this.$route.params.id)
@@ -478,12 +508,22 @@ export default {
     play (input) {
       let _this = this
       _this.table = _this.tableData.filter(Val => {
-        if (Val.name.includes(input) || Val.class.includes(input)) {
+        if (Val.name.includes(input) || Val.class.includes(input) || Val.price.includes(input)) {
           _this.table.push(Val)
           return _this.table
         }
       })
       this.tableData_s = _this.table
+    },
+    playlist (input) {
+      let _this = this
+      _this.table = _this.porductsdata.filter(Val => {
+        if (Val.name.includes(input)) {
+          _this.table.push(Val)
+          return _this.table
+        }
+      })
+      this.porductsdata_s = _this.table
     }
   }
 }

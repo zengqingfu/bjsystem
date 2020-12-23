@@ -434,10 +434,7 @@ export default {
     async getdata () {
       this.tableData = await this.jsondata.getData('products')
       for (let i = 0; i < this.tableData.length; i++) {
-        this.tableData[i].class = this.tableData[i].class.replace(/"([^"]*)"/g, '$1')
-        this.tableData[i].class = this.tableData[i].class.replace(/,/g, '/')
-        this.tableData[i].class = this.tableData[i].class.replace(/\[/g, '')
-        this.tableData[i].class = this.tableData[i].class.replace(/\]/g, '')
+        this.tableData[i].class = this.jsondata.classstrog(this.tableData[i].class)
       }
       this.tableData_s = this.tableData
     },

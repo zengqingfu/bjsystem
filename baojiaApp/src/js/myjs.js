@@ -174,6 +174,14 @@ export default {
       _int.slice(i).replace(digitsRE, '$1,') +
       _float
   },
+  classstrog (data) {
+    let dataend
+    dataend = data.replace(/"([^"]*)"/g, '$1')
+    dataend = dataend.replace(/,/g, '/')
+    dataend = dataend.replace(/\[/g, '')
+    dataend = dataend.replace(/\]/g, '')
+    return dataend
+  },
   getSummaries (param) { // 统计行数据生成
     const { columns, data } = param
     const sums = []
