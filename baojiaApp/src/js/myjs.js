@@ -82,15 +82,21 @@ export default {
       return 'error'
     }
   },
-  getDataClass (form, id, dataclass) {
-    return axios({
-      url: geturl() + '/getDataClass/' + form + '/' + id + '/' + dataclass + '/' + sessionStorage.getItem('Token'),
-      method: 'GET',
-      dataType: 'JSON',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
+  async getDataClass (form, id, dataclass) {
+    try {
+      const response = await axios({
+        url: geturl() + '/getDataClass/' + form + '/' + id + '/' + dataclass + '/' + sessionStorage.getItem('Token'),
+        method: 'GET',
+        dataType: 'JSON',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      return response.data
+    } catch (error) {
+      console.log(error)
+      return 'error'
+    }
   },
   getDatalogin (token) { // token查询
     return axios({
