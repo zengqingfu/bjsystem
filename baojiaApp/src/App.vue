@@ -30,9 +30,9 @@ export default {
   color: #2c3e50;
   margin-top: 0px;
 }
-  .el-dialog{
+  /* .el-dialog{
     margin-top: 50px !important;
-  }
+  } */
   body {
     margin: 0px;
   }
