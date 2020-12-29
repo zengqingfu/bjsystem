@@ -129,7 +129,7 @@ export default {
         name: '',
         company: '',
         date: '',
-        content: '',
+        content: '无',
         class: '',
         brand: '',
         detail: '',
