@@ -7,28 +7,27 @@
       <el-input v-model="inputData" placeholder="请输入搜索内容" @input="play(inputData)" style="width:200px;float: right;;margin-right:0px"></el-input>
     </h3>
     <el-dialog title="添加配件" :visible.sync="dialogFormVisible">
-      <el-form ref="form" :model="form" :rules="rules"  label-width="80px" class="demo-ruleForm">
+      <el-form ref="form" :model="form" :rules="rules"  label-width="100px" class="demo-ruleForm">
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="品牌" prop="brand">
           <el-input v-model="form.brand" style="width:46%" ></el-input>
         </el-form-item>
-        <el-form-item label="参数" prop="detail">
-          <el-input type="textarea" v-model="form.detail" ></el-input>
+        <el-form-item label="单位" prop="unit">
+          <el-input v-model="form.unit" style="width:46%" ></el-input>
         </el-form-item>
-        <el-form-item label="价格" prop="price">
+        <el-form-item label="成本单价(元)" prop="cost">
+          <el-input type="number"  v-model="form.cost" style="width:46%" ></el-input>
+        </el-form-item>
+        <el-form-item label="单价(元)" prop="price">
           <el-input type="number"  v-model="form.price" style="width:46%" ></el-input>
         </el-form-item>
-        <el-form-item label="日期" prop="date">
-          <el-col :span="11">
-            <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期" v-model="form.date" style="width: 100%;"></el-date-picker>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="单位" prop="company">
-            <el-select v-model="form.company" placeholder="请选择" style="width:46%" >
-            <el-option label="平米" value="平米"></el-option>
-            <el-option label="单个" value="单个"></el-option>
+        <el-form-item label="类别">
+            <el-select v-model="form.category" placeholder="请选择" style="width:46%" >
+            <el-option label="设备" value="设备"></el-option>
+            <el-option label="软件" value="软件"></el-option>
+            <el-option label="视频" value="视频"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item label="分类" prop="class">
@@ -42,6 +41,9 @@
             style="width:46%;">
           </el-cascader>
         </el-form-item>
+        <el-form-item label="参数" prop="detail">
+          <el-input type="textarea" v-model="form.detail" ></el-input>
+        </el-form-item>
         <el-form-item label="备注" prop="content">
           <el-input type="textarea" v-model="form.content" ></el-input>
         </el-form-item>
@@ -53,33 +55,32 @@
       </el-form>
     </el-dialog>
     <el-dialog title="修改" :visible.sync="dialogAddVisible">
-      <el-form ref="formModify" :model="formModify" :rules="rules"  label-width="80px" class="demo-ruleForm">
+      <el-form ref="formModify" :model="formModify" :rules="rules"  label-width="100px" class="demo-ruleForm">
         <el-form-item label="名称" prop="name">
           <el-input v-model="formModify.name"></el-input>
         </el-form-item>
         <el-form-item label="品牌" prop="brand">
           <el-input v-model="formModify.brand" style="width:46%" ></el-input>
         </el-form-item>
-        <el-form-item label="参数" prop="detail">
-          <el-input type="textarea" v-model="formModify.detail" ></el-input>
+        <el-form-item label="单位" prop="unit">
+          <el-input v-model="formModify.unit" style="width:46%" ></el-input>
         </el-form-item>
-        <el-form-item label="价格" prop="price">
+        <el-form-item label="成本单价(元)" prop="cost">
+          <el-input type="number"  v-model="formModify.cost" style="width:46%" ></el-input>
+        </el-form-item>
+        <el-form-item label="单价(元)" prop="price">
           <el-input type="number"  v-model="formModify.price" style="width:46%" ></el-input>
         </el-form-item>
-        <el-form-item label="日期" prop="date">
-          <el-col :span="11">
-            <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期" v-model="formModify.date" style="width: 100%;"></el-date-picker>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="单位" prop="company">
-            <el-select v-model="formModify.company" placeholder="请选择" style="width:46%" >
-            <el-option label="平米" value="平米"></el-option>
-            <el-option label="单个" value="单个"></el-option>
+        <el-form-item label="类别">
+            <el-select v-model="formModify.category" placeholder="请选择" style="width:46%" >
+            <el-option label="设备" value="设备"></el-option>
+            <el-option label="软件" value="软件"></el-option>
+            <el-option label="视频" value="视频"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item label="分类" prop="class">
           <el-cascader
-            v-model="formModify.class"
+            v-model="form.class"
             :options="productsclass"
             :props="{ expandTrigger: 'hover' }"
             @change="handleChange"
@@ -88,6 +89,9 @@
             style="width:46%;">
           </el-cascader>
           {{prodcutstemplateclass}}
+        </el-form-item>
+        <el-form-item label="参数" prop="detail">
+          <el-input type="textarea" v-model="formModify.detail" ></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="content">
           <el-input type="textarea" v-model="formModify.content" ></el-input>
@@ -107,14 +111,16 @@
         <el-button @click="outerVisible = false">取消</el-button>
         <el-button @click="deletepost">删除</el-button>
     </el-dialog>
-    <el-table :data="tableData_s" @row-click="handle" border :summary-method="jsondata.getSummaries" id="expenditureContractlist" height='90%' style="width: 100%">
+    <el-table :data="tableData_s" @row-click="handle" border id="expenditureContractlist" style="width: 100%">
       <el-table-column type="index"></el-table-column>
-      <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="brand" label="品牌" ></el-table-column>
-      <el-table-column prop="detail" label="参数" ></el-table-column>
-      <el-table-column prop="price" label="价格" sortable></el-table-column>
-      <el-table-column prop="company" label="单位" ></el-table-column>
+      <el-table-column prop="category" label="类别" width="80"></el-table-column>
+      <el-table-column prop="name" label="名称" width="180"></el-table-column>
+      <el-table-column prop="brand" label="品牌" width="120"></el-table-column>
+      <el-table-column prop="unit" label="单位" width="80"></el-table-column>
+      <el-table-column prop="cost" label="成本单价(元)" width="100"></el-table-column>
+      <el-table-column prop="price" label="单价(元)" width="80"></el-table-column>
       <el-table-column prop="class" label="分类" ></el-table-column>
+      <el-table-column prop="detail" label="工艺及材料说明"></el-table-column>
       <el-table-column prop="content" label="备注" ></el-table-column>
     </el-table>
   </el-main>
@@ -126,19 +132,28 @@ export default {
   data () {
     return {
       form: {
-        name: '',
-        company: '',
-        date: '',
-        content: '无',
+        name: '寸拼接屏',
+        unit: '个',
+        content: '未税/未含拼接盒(拼接盒600)',
         class: '',
-        brand: '',
+        brand: '三星',
         detail: '',
         price: ''
       },
       productsclassvalue: [],
       productsclass: [{
         value: '道具',
-        label: '道具'
+        label: '道具',
+        children: [{
+          value: 'fankui',
+          label: '反馈'
+        }, {
+          value: 'xiaolv',
+          label: '效率'
+        }, {
+          value: 'kekong',
+          label: '可控'
+        }]
       }, {
         value: 'LED屏',
         label: 'LED屏'
@@ -147,7 +162,40 @@ export default {
         label: '投影'
       }, {
         value: '屏幕',
-        label: '屏幕'
+        label: '屏幕',
+        children: [{
+          value: '拼接屏',
+          label: '拼接屏',
+          children: [{
+            value: '进口',
+            label: '进口'
+          }, {
+            value: '国产',
+            label: '国产'
+          }]
+        }, {
+          value: '一体机',
+          label: '一体机',
+          children: [{
+            value: '一体机（不触摸）',
+            label: '一体机（不触摸）'
+          }, {
+            value: '电容触摸一体机',
+            label: '电容触摸一体机'
+          }, {
+            value: '红外触摸一体机',
+            label: '红外触摸一体机'
+          }]
+        }, {
+          value: '广告机',
+          label: '广告机'
+        }, {
+          value: '全息屏（带柜体）',
+          label: '全息屏（带柜体）'
+        }, {
+          value: '全息屏（不带柜体）',
+          label: '全息屏（不带柜体）'
+        }]
       }, {
         value: '广告物料',
         label: '广告物料'
@@ -202,10 +250,10 @@ export default {
         name: [
           { required: true, message: '配件名称', trigger: 'blur' }
         ],
-        price: [
+        cost: [
           { required: true, message: '填写价格', trigger: 'blur' }
         ],
-        company: [
+        unit: [
           { required: true, message: '选择单位', trigger: 'blur' }
         ],
         class: [
@@ -240,6 +288,7 @@ export default {
       })
     },
     async updatpostData () { // 更新数据
+      this.formModify.detail = this.formModify.detail.replace(/\n/g, '\n')
       this.formModify.class = JSON.stringify(this.formModify.class)
       if (await this.jsondata.updatpostData('products', this.formModify) === 'OK') {
         this.dialogAddVisible = false
@@ -262,6 +311,7 @@ export default {
     async postData () { // 添加数据
       console.log(this.form)
       this.form.class = JSON.stringify(this.form.class)
+      this.form.detail = this.form.detail.replace(' ', '/n')
       if (await this.jsondata.postData('products', this.form) === 'OK') {
         this.dialogFormVisible = false
         this.getdata()

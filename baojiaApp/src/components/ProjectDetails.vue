@@ -19,7 +19,7 @@
         <el-form-item>
           <el-button type="primary" @click="updatpostData('project', form)">修改</el-button>
           <el-button @click="dialogFormVisible = false">取消</el-button>
-          <!-- <el-button style="float:right" @click="outerVisible = true">删除</el-button> -->
+          <el-button style="float:right" @click="outerVisibledelete = true">删除</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -114,11 +114,13 @@
             <div style="margin:0px 0px 30px 80px">
               <el-table :data="tableData_s" @row-click="pushproducts" border :summary-method="jsondata.getSummaries" id="expenditureContractlist" height='90%' style="width: 100%">
                 <el-table-column type="index"></el-table-column>
-                <el-table-column prop="name" label="名称"></el-table-column>
-                <el-table-column prop="detail" label="参数" ></el-table-column>
-                <el-table-column prop="price" label="价格" sortable></el-table-column>
-                <el-table-column prop="company" label="单位" ></el-table-column>
-                <el-table-column prop="class" label="分类" ></el-table-column>
+                <el-table-column prop="category" label="类别" width="80"></el-table-column>
+                <el-table-column prop="name" label="名称" width="180"></el-table-column>
+                <el-table-column prop="brand" label="品牌" width="120"></el-table-column>
+                <el-table-column prop="unit" label="单位" width="50"></el-table-column>
+                <el-table-column prop="cost" label="成本单价(元)" width="130"></el-table-column>
+                <el-table-column prop="price" label="单价(元)" width="130"></el-table-column>
+                <el-table-column prop="detail" label="工艺及材料说明"></el-table-column>
                 <el-table-column prop="content" label="备注" ></el-table-column>
               </el-table>
             </div>
@@ -161,6 +163,14 @@
         <el-button @click="updatpostData_end ()">删除</el-button>
     </el-dialog>
     <el-dialog
+        width="30%"
+        title="确认删除项目"
+        :visible.sync="outerVisibledelete"
+        append-to-body>
+        <el-button @click="outerVisible = false">取消</el-button>
+        <el-button @click="form.close = 1; updatpostData ('project', form)">删除</el-button>
+    </el-dialog>
+    <el-dialog
         width="300px"
         title="添加数量"
         :visible.sync="productsintbox"
@@ -179,26 +189,48 @@
       <el-button style="float: right; margin-left:15px;" @click="subpushproductsbox = true">添加展项</el-button>
       <el-button style="float: right;margin-right:0px" onclick="exportExcel('#projectdate')">点击导出</el-button>
     </h3>
+    <div class="titledivbox">
+      <table><tr><th colspan="8" ><h3 >总额：{{total_money}}</h3></th></tr></table>
+      <el-table :data="gongcheng" border show-summary :summary-method="jsondata.getSummaries" class="titletop" style="width: 100%">
+        <el-table-column prop="category" label="类别" width="80"></el-table-column>
+        <el-table-column prop="name" label="名称" width="180"></el-table-column>
+        <el-table-column prop="brand" label="品牌" width="120"></el-table-column>
+        <el-table-column prop="productsintnb" label="数量" width="80"></el-table-column>
+        <el-table-column prop="unit" label="单位" width="50"></el-table-column>
+        <el-table-column prop="cost" label="成本单价(元)" width="130"></el-table-column>
+        <el-table-column prop="price" label="单价(元)" width="130"></el-table-column>
+        <el-table-column prop="money" label="小计(元)" width="130"></el-table-column>
+        <el-table-column prop="detail" label="工艺及材料说明"></el-table-column>
+        <el-table-column prop="content" label="备注" ></el-table-column>
+        <el-table-column label="操作" ></el-table-column>
+      </el-table>
+    </div>
     <div id="projectdate">
-    <table><tr><th colspan="8" ><h3 >总额：{{total_money}}</h3></th></tr></table>
-    <hr style="height: 30px;background-color: #eee;border: 0px;" />
     <el-row v-for="item in subData" :key="item.id">
-      <div style="position: absolute;right: 0px;top: 20px;">
-        <el-button type="primary" @click="templatelistVisible = true, pushproductsid = item.indexid">添加套件</el-button>
-        <el-button type="primary" @click="productslistVisible = true, pushproductsid = item.indexid">添加单件</el-button>
-        <el-button type="primary" @click="redsubproducts(item.id)">修改</el-button>
+      <div style="position: absolute;right: 10px;top: 5px;">
+        <el-button @click="templatelistVisible = true, pushproductsid = item.indexid">添加套件</el-button>
+        <el-button @click="productslistVisible = true, pushproductsid = item.indexid">添加单件</el-button>
+        <el-button @click="redsubproducts(item.id)">修改</el-button>
         <el-button @click="outerVisible = true, deleteprojectsub = item.id">删除</el-button>
       </div>
-      <table><tr><th colspan="1" > <h3>{{item.name}} --- {{item.projectclass}}</h3></th></tr></table>
-      <el-table :data="item.products" border show-summary :summary-method="jsondata.getSummaries"  style="width: 100%">
-        <el-table-column prop="class" label="类别" ></el-table-column>
-        <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="price" label="价格"></el-table-column>
-        <el-table-column prop="productsintnb" label="单位" ></el-table-column>
-        <el-table-column prop="money" label="总价" ></el-table-column>
+      <table v-show="item.showtitle" style="width: -webkit-fill-available;background-color:rgb(1 82 144);"><tr><th colspan="1" ><h3 style="color:#fff;margin:8px 20px">{{item.name}}<span style="font-size:14px"> --- 导出单项</span></h3></th></tr></table>
+      <table v-show="item.showsub" style="width: -webkit-fill-available;background-color:rgb(164 204 175)"><tr><th colspan="1"><p style="color:#fff;margin:8px 20px">{{item.projectclass}}<span style="font-size:14px"> --- 导出单项</span></p></th></tr></table>
+      <el-table :data="item.products" border stripe show-summary :summary-method="jsondata.getSummaries"  style="width: 100%">
+        <el-table-column prop="category" label="类别" width="80"></el-table-column>
+        <el-table-column prop="name" label="名称" width="180"></el-table-column>
+        <el-table-column prop="brand" label="品牌" width="120"></el-table-column>
+        <el-table-column prop="productsintnb" label="数量" width="80"></el-table-column>
+        <el-table-column prop="unit" label="单位" width="50"></el-table-column>
+        <el-table-column prop="cost" label="成本单价(元)" width="130"></el-table-column>
+        <el-table-column prop="price" label="单价(元)" width="130"></el-table-column>
+        <el-table-column prop="money" label="小计(元)" width="130"></el-table-column>
+        <!-- <el-table-column prop="class" label="分类" ></el-table-column> -->
+        <el-table-column prop="detail" label="工艺及材料说明"></el-table-column>
         <el-table-column prop="content" label="备注" ></el-table-column>
         <el-table-column label="操作" >
           <template slot-scope="scope">
+            <el-button @click="upGo(item.products, scope.$index, item.indexid)" type="text" size="small"><i class="el-icon-top"></i></el-button>
+            <el-button @click="downGo(item.products, scope.$index, item.indexid)" type="text" size="small"><i class="el-icon-bottom"></i></el-button>
             <el-button type="text" @click="productssubmod(scope.$index, item)" size="small">调整信息</el-button>
             <el-button @click="redproducts(scope.$index, item)" type="text" size="small">删除</el-button>
           </template>
@@ -220,6 +252,7 @@ export default {
       subredproductsboxred: false,
       inputData: '',
       modsubredproducts: {},
+      outerVisibledelete: false,
       modsubredproductsbox: false,
       subredproductsbox: false,
       productsintbox: false,
@@ -247,7 +280,17 @@ export default {
       yewu: [],
       productsclass: [{
         value: '道具',
-        label: '道具'
+        label: '道具',
+        children: [{
+          value: 'fankui',
+          label: '反馈'
+        }, {
+          value: 'xiaolv',
+          label: '效率'
+        }, {
+          value: 'kekong',
+          label: '可控'
+        }]
       }, {
         value: 'LED屏',
         label: 'LED屏'
@@ -256,7 +299,40 @@ export default {
         label: '投影'
       }, {
         value: '屏幕',
-        label: '屏幕'
+        label: '屏幕',
+        children: [{
+          value: '拼接屏',
+          label: '拼接屏',
+          children: [{
+            value: '进口',
+            label: '进口'
+          }, {
+            value: '国产',
+            label: '国产'
+          }]
+        }, {
+          value: '一体机',
+          label: '一体机',
+          children: [{
+            value: '一体机（不触摸）',
+            label: '一体机（不触摸）'
+          }, {
+            value: '电容触摸一体机',
+            label: '电容触摸一体机'
+          }, {
+            value: '红外触摸一体机',
+            label: '红外触摸一体机'
+          }]
+        }, {
+          value: '广告机',
+          label: '广告机'
+        }, {
+          value: '全息屏（带柜体）',
+          label: '全息屏（带柜体）'
+        }, {
+          value: '全息屏（不带柜体）',
+          label: '全息屏（不带柜体）'
+        }]
       }, {
         value: '广告物料',
         label: '广告物料'
@@ -283,9 +359,6 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入名称', trigger: 'blur' }
-        ],
-        projectclass: [
-          { required: true, message: '请选择签约日期', trigger: 'blur' }
         ]
       },
       table: [],
@@ -318,7 +391,7 @@ export default {
     },
     updatpostData_products () {
       this.subredproductsboxred = false
-      console.log(this.subredproductsred)
+      // console.log(this.subredproductsred)
       this.subredproductsred.money = Number(this.subredproductsred.productsintnb) * Number(this.subredproductsred.price)
       this.serverproducts.products = JSON.stringify(this.modsubredproducts.products)
       this.serverproducts.id = this.modsubredproducts.id
@@ -336,9 +409,10 @@ export default {
     },
     productspushsub () {
       if (this.productslistVisible === true) {
+        this.productspushdata.detail = this.productspushdata.detail.replace(/\n/g, '---').replace(/\r/g, '---') // 格式化换行
         this.productspushdata.productsintnb = Number(this.productsintnb)
-        this.productspushdata.money = Number(this.productspushdata.productsintnb) * Number(this.productspushdata.price)
         this.projectsubData[this.pushproductsid].products.push(this.productspushdata)
+        // console.log(this.projectsubData[this.pushproductsid].products, this.productspushdata)
       }
       if (this.templatelistVisible === true) {
         this.productstemplatedata = JSON.parse(this.productspushdata.productsid)
@@ -353,6 +427,7 @@ export default {
       this.updatpostData('projectsub', this.serverproducts)
     },
     pushproducts (row) {
+      this.productspushdata = {}
       this.productsintbox = true
       this.productsintnb = 1
       this.productspushdata = row
@@ -368,16 +443,32 @@ export default {
       this.form = await this.jsondata.getDataId('project', this.$route.params.id)
       this.projectsubData = await this.jsondata.getDataClass('projectsub', this.$route.params.id, 'projectid')
       this.subData = JSON.parse(JSON.stringify(this.projectsubData))
+      this.subData = this.subData.sort(function (a, b) { return (a.projectclass + '').localeCompare(b.projectclass + '') })
+      this.subData = this.subData.sort(function (a, b) { return (a.name + '').localeCompare(b.name + '') })
       for (let i = 0; i < this.subData.length; i++) {
         this.subData[i].products = JSON.parse(this.subData[i].products)
         this.projectsubData[i].products = JSON.parse(this.projectsubData[i].products)
         this.subData[i].indexid = i
         this.projectsubData[i].indexid = i
         for (let is = 0; is < this.subData[i].products.length; is++) {
+          this.subData[i].products[is].money = this.subData[i].products[is].price * this.subData[i].products[is].productsintnb
           this.total_money += this.subData[i].products[is].money
+          this.subData[i].products[is].detail = this.subData[i].products[is].detail.replace(/------/g, '\n').replace(/---/g, '\n') // 格式化换行
+          this.subData[i].products[is].detail = this.subData[i].products[is].detail // 格式化换行
+          this.subData[i].products[is].productsintnb = '共 ' + this.subData[i].products[is].productsintnb + ' ' + this.subData[i].products[is].unit
           this.subData[i].products[is].money = this.jsondata.currency(this.subData[i].products[is].money, '￥', 2)
-          this.subData[i].products[is].price = '￥' + this.subData[i].products[is].price + ' / ' + this.subData[i].products[is].company
-          this.subData[i].products[is].productsintnb = '共 ' + this.subData[i].products[is].productsintnb + ' ' + this.subData[i].products[is].company
+          this.subData[i].products[is].price = this.jsondata.currency(this.subData[i].products[is].price, '￥', 2) + ' / ' + this.subData[i].products[is].unit
+          this.subData[i].products[is].cost = this.jsondata.currency(this.subData[i].products[is].cost, '￥', 2) + ' / ' + this.subData[i].products[is].unit
+        }
+      }
+      for (let i = 0; i < this.subData.length; i++) {
+        this.subData[i].showtitle = true
+        this.subData[i].showsub = false
+        if (i !== 0 && this.subData[i].name === this.subData[i - 1].name) {
+          this.subData[i].showtitle = false
+        }
+        if (this.subData[i].projectclass !== '') {
+          this.subData[i].showsub = true
         }
       }
       this.total_money = this.jsondata.currency(this.total_money, '￥', 2)
@@ -400,7 +491,11 @@ export default {
         this.productsintbox = false
         this.productslistVisible = false
         this.templatelistVisible = false
-        this.getdata()
+        if (list === 'project') {
+          this.$router.push('/index/')
+        } else {
+          this.getdata()
+        }
       }
     },
     async updatpostData_end () { // 删除
@@ -426,10 +521,24 @@ export default {
         this.$refs['subpushproducts'].resetFields()
       }
     },
+    upGo (fieldData, index) {
+      if (index !== 0) {
+        fieldData[index] = fieldData.splice(index - 1, 1, fieldData[index])[0]
+      } else {
+        fieldData.push(fieldData.shift())
+      }
+    },
+    downGo (fieldData, index) {
+      if (index !== fieldData.length - 1) {
+        fieldData[index] = fieldData.splice(index + 1, 1, fieldData[index])[0]
+      } else {
+        fieldData.unshift(fieldData.splice(index, 1)[0])
+      }
+    },
     play (input) {
       let _this = this
       _this.table = _this.tableData.filter(Val => {
-        if (Val.name.includes(input) || Val.class.includes(input) || Val.price.includes(input)) {
+        if (Val.name.includes(input) || Val.class.includes(input) || Val.cost.includes(input)) {
           _this.table.push(Val)
           return _this.table
         }

@@ -180,7 +180,22 @@ export default {
   padding-right: 15px;
   padding-bottom: 15px;
 }
+#projectdate{
+  position: relative;
+  height: 90%;
+  overflow-x: scroll;
+  margin-right: -14px;
+}
 
+.titletop .is-scrolling-none{
+  display: none;
+}
+#projectdate .el-table__header-wrapper {
+  display: none;
+}
+#projectdate .titletop .el-table__header-wrapper {
+  display: block;
+}
 @media screen and (max-width: 780px) {
   .el-menu--collapse {
     position: absolute !important;

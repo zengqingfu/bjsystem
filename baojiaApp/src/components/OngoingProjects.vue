@@ -16,6 +16,9 @@
         <el-form-item label="项目名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
+        <el-form-item label="客户名称" prop="customer">
+          <el-input v-model="form.customer" style="width:46%" ></el-input>
+        </el-form-item>
         <el-form-item label="项目负责人" prop="ContractAmount">
           <el-input v-model="form.manager" style="width:46%" ></el-input>
         </el-form-item>
@@ -33,6 +36,7 @@
       <el-table-column type="index"></el-table-column>
       <el-table-column prop="date" label="时间" sortable></el-table-column>
       <el-table-column prop="name" label="项目名称" sortable></el-table-column>
+      <el-table-column prop="customer" label="客户名称" sortable></el-table-column>
       <el-table-column prop="manager" label="负责人" sortable></el-table-column>
       <el-table-column prop="content" label="项目说明" sortable></el-table-column>
     </el-table>
@@ -57,6 +61,7 @@ export default {
         name: '',
         content: '',
         date: '',
+        customer: '',
         manager: ''
       },
       formexpenditureData: [],
@@ -124,7 +129,7 @@ export default {
       // console.log(row, event, column)
     },
     async getdata () {
-      this.tableData = await this.jsondata.getData('project')
+      this.tableData = await this.jsondata.getDataClass('project', '0', 'close')
       this.tableData_s = this.tableData
     },
     play (input) {

@@ -54,4 +54,10 @@ export default {
   transform: translateX(10px);
   opacity: 0;
 }
+.el-table .cell{
+  white-space: pre-line;
+}
+.el-row{
+  margin: 0px;
+}
 </style>
