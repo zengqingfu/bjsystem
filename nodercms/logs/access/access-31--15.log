@@ -1,0 +1,13 @@
+[2020-12-31 15:16:00.359] [WARN] access - GET /admin/install
+[2020-12-31 15:16:00.394] [WARN] access - GET /assets/admin/vendor.css
+[2020-12-31 15:16:00.399] [WARN] access - GET /assets/admin/main.css
+[2020-12-31 15:16:00.400] [WARN] access - GET /assets/admin/vendor.js
+[2020-12-31 15:16:00.402] [WARN] access - GET /assets/admin/main.js
+[2020-12-31 15:16:00.403] [WARN] access - GET /assets/admin/views.js
+[2020-12-31 15:16:00.489] [WARN] access - GET /api/install
+[2020-12-31 15:16:00.523] [WARN] access - GET /api/install/themes
+[2020-12-31 15:16:00.537] [WARN] access - GET /assets/admin/images/logo-lg.png
+[2020-12-31 15:16:00.538] [WARN] access - GET /assets/admin/images/sponsor/weixin.png
+[2020-12-31 15:16:00.540] [WARN] access - GET /assets/admin/images/sponsor/alipay.jpg
+[2020-12-31 15:32:06.772] [ERROR] access - PUT /api/install/test-database
+[2020-12-31 15:32:06.779] [WARN] access - GET /assets/admin/fonts/fontawesome-webfont.woff2?v=4.6.1
