@@ -234,7 +234,7 @@
           <template slot-scope="scope">
             <el-button @click="upGo(item.products, scope.$index, item.indexid)" type="text" size="small"><i class="el-icon-top"></i></el-button>
             <el-button @click="downGo(item.products, scope.$index, item.indexid)" type="text" size="small"><i class="el-icon-bottom"></i></el-button>
-            <el-button type="text" @click="productssubmod(scope.$index, item)" size="small">调整信息</el-button>
+            <!-- <el-button type="text" @click="productssubmod(scope.$index, item)" size="small">调整信息</el-button> -->
             <el-button @click="redproducts(scope.$index, item)" type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
@@ -384,6 +384,23 @@ export default {
     // this.getFormData('supplierlist')
     // this.getFormDataClass('expenditureclass')
     this.getdata()
+  },
+  watch: {
+    // subData: {// 深度监听，可监听到对象、数组的变化
+    //   handler (newValue, oldValue) {
+    //     console.log(newValue, oldValue)
+    //     if (newValue.length === oldValue.length) {
+    //       for (let i = 0; i < newValue.length; i++) {
+    //         if (newValue[i].products.length === oldValue[i].products.length) {
+    //           if (JSON.stringify(newValue[i].products) === JSON.stringify(oldValue[i].products)) {
+    //           }
+    //         }
+    //       }
+    //     }
+    //   },
+    //   immediate: false,
+    //   deep: true // true 深度监听
+    // }
   },
   methods: {
     modifyjson (datajson, indexid) { // 更新数据
