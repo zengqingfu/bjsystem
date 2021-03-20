@@ -232,8 +232,8 @@
         <el-table-column prop="content" label="备注" ></el-table-column>
         <el-table-column label="操作" >
           <template slot-scope="scope">
-            <el-button @click="upGo(item.products, scope.$index, item.indexid)" type="text" size="small"><i class="el-icon-top"></i></el-button>
-            <el-button @click="downGo(item.products, scope.$index, item.indexid)" type="text" size="small"><i class="el-icon-bottom"></i></el-button>
+            <el-button @click="upGo(projectsubData[item.indexid], scope.$index, item.indexid)" type="text" size="small"><i class="el-icon-top"></i></el-button>
+            <el-button @click="downGo(projectsubData[item.indexid], scope.$index, item.indexid)" type="text" size="small"><i class="el-icon-bottom"></i></el-button>
             <!-- <el-button type="text" @click="productssubmod(scope.$index, item)" size="small">调整信息</el-button> -->
             <el-button @click="redproducts(scope.$index, item)" type="text" size="small">删除</el-button>
           </template>
@@ -543,18 +543,24 @@ export default {
       }
     },
     upGo (fieldData, index) {
+      let sqlid = fieldData.id
+      fieldData = fieldData.products
       if (index !== 0) {
         fieldData[index] = fieldData.splice(index - 1, 1, fieldData[index])[0]
       } else {
         fieldData.push(fieldData.shift())
       }
+      this.modifyjson(fieldData, sqlid)
     },
     downGo (fieldData, index) {
+      let sqlid = fieldData.id
+      fieldData = fieldData.products
       if (index !== fieldData.length - 1) {
         fieldData[index] = fieldData.splice(index + 1, 1, fieldData[index])[0]
       } else {
         fieldData.unshift(fieldData.splice(index, 1)[0])
       }
+      this.modifyjson(fieldData, sqlid)
     },
     play (input) {
       let _this = this
