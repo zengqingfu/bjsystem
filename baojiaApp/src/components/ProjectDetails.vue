@@ -195,8 +195,8 @@
         <el-table-column prop="category" label="类别" width="80"></el-table-column>
         <el-table-column prop="name" label="名称" width="180"></el-table-column>
         <el-table-column prop="brand" label="品牌" width="120"></el-table-column>
-        <el-table-column prop="productsintnb" label="数量" width="80"></el-table-column>
-        <el-table-column prop="unit" label="单位" width="50"></el-table-column>
+        <el-table-column prop="productsintnb" label="数量" width="90"></el-table-column>
+        <el-table-column prop="unit" label="单位" width="70"></el-table-column>
         <el-table-column prop="cost" label="成本单价(元)" width="130"></el-table-column>
         <el-table-column prop="price" label="单价(元)" width="130"></el-table-column>
         <el-table-column prop="money" label="小计(元)" width="130"></el-table-column>
@@ -217,23 +217,47 @@
       <table v-show="item.showsub" style="width: -webkit-fill-available;background-color:rgb(164 204 175)"><tr><th colspan="1"><p style="color:#fff;margin:8px 20px">{{item.projectclass}}<span style="font-size:14px"> --- 导出单项</span></p></th></tr></table>
       <el-table :data="item.products" border show-summary :summary-method="jsondata.getSummaries"  style="width: 100%">
         <el-table-column prop="category" label="类别" width="80"></el-table-column>
-        <el-table-column prop="name" label="名称" width="180"></el-table-column>
-        <el-table-column prop="brand" label="品牌" width="120"></el-table-column>
-        <el-table-column label="数量" width="80">
+        <el-table-column prop="name" label="名称" width="180">
           <template slot-scope="scope">
-            <el-input type="number" v-model="scope.row.productsintnb"></el-input>
+            <el-input @input="projectsubData[item.indexid].products[scope.$index].name = scope.row.name; changeInput(projectsubData[item.indexid])" v-model="scope.row.name" ></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="unit" label="单位" width="50"></el-table-column>
-        <el-table-column prop="cost" label="成本单价(元)" width="130"></el-table-column>
-        <el-table-column prop="price" label="单价(元)" width="130"></el-table-column>
+        <el-table-column prop="brand" label="品牌" width="120">
+          <template slot-scope="scope">
+            <el-input @input="projectsubData[item.indexid].products[scope.$index].brand = scope.row.brand; changeInput(projectsubData[item.indexid])" v-model="scope.row.brand" ></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="数量" width="90">
+          <template slot-scope="scope">
+            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].productsintnb = scope.row.productsintnb; changeInput(projectsubData[item.indexid])" v-model="scope.row.productsintnb" ></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="unit" label="单位" width="70">
+          <template slot-scope="scope">
+            <el-input @input="projectsubData[item.indexid].products[scope.$index].unit = scope.row.unit; changeInput(projectsubData[item.indexid])" v-model="scope.row.unit" ></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="成本单价(元)" width="130">
+          <template slot-scope="scope">
+            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].cost = scope.row.cost; changeInput(projectsubData[item.indexid])" v-model="scope.row.cost" ><i slot="prefix" class="el-input__icon">￥</i></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单价(元)" width="130">
+          <template slot-scope="scope">
+            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].price = scope.row.price; changeInput(projectsubData[item.indexid])" v-model="scope.row.price" ><i slot="prefix" class="el-input__icon">￥</i></el-input>
+          </template>
+        </el-table-column>
         <el-table-column prop="money" label="小计(元)" width="130"></el-table-column>
         <el-table-column prop="detail" label="工艺及材料说明"></el-table-column>
-        <el-table-column prop="content" label="备注" ></el-table-column>
+        <el-table-column prop="content" label="备注" >
+          <template slot-scope="scope">
+            <el-input type="textarea" @input="projectsubData[item.indexid].products[scope.$index].content = scope.row.content; changeInput(projectsubData[item.indexid])" v-model="scope.row.content" ></el-input>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" >
           <template slot-scope="scope">
-            <el-button @click="upGo(projectsubData[item.indexid], scope.$index, item.indexid)" type="text" size="small"><i class="el-icon-top"></i></el-button>
-            <el-button @click="downGo(projectsubData[item.indexid], scope.$index, item.indexid)" type="text" size="small"><i class="el-icon-bottom"></i></el-button>
+            <el-button @click="upGo(projectsubData[item.indexid], scope.$index)" type="text" size="small"><i class="el-icon-top"></i></el-button>
+            <el-button @click="downGo(projectsubData[item.indexid], scope.$index)" type="text" size="small"><i class="el-icon-bottom"></i></el-button>
             <!-- <el-button type="text" @click="productssubmod(scope.$index, item)" size="small">调整信息</el-button> -->
             <el-button @click="redproducts(scope.$index, item)" type="text" size="small">删除</el-button>
           </template>
@@ -403,6 +427,10 @@ export default {
     // }
   },
   methods: {
+    changeInput (listdata) {
+      console.log(listdata)
+      this.modifyjson(listdata.products, listdata.id)
+    },
     modifyjson (datajson, indexid) { // 更新数据
       this.serverproducts.products = JSON.stringify(datajson)
       this.serverproducts.id = indexid
@@ -478,8 +506,8 @@ export default {
           this.subData[i].products[is].detail = this.subData[i].products[is].detail // 格式化换行
           // this.subData[i].products[is].productsintnb = ' ' + this.subData[i].products[is].productsintnb
           this.subData[i].products[is].money = this.jsondata.currency(this.subData[i].products[is].money, '￥', 2)
-          this.subData[i].products[is].price = this.jsondata.currency(this.subData[i].products[is].price, '￥', 2)
-          this.subData[i].products[is].cost = this.jsondata.currency(this.subData[i].products[is].cost, '￥', 2)
+          // this.subData[i].products[is].price = this.jsondata.currency(this.subData[i].products[is].price, '￥', 2)
+          // this.subData[i].products[is].cost = this.jsondata.currency(this.subData[i].products[is].cost, '￥', 2)
         }
       }
       for (let i = 0; i < this.subData.length; i++) {
