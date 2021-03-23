@@ -22,7 +22,7 @@
           <i class="el-icon-menu"></i>项目报价
         </el-menu-item>
         <el-menu-item index="/productslist">
-          <i class="el-icon-user-solid"></i>配件管理
+          <i class="el-icon-user-solid"></i>产品管理
         </el-menu-item>
         <el-menu-item index="/productstemplate">
           <i class="el-icon-s-shop"></i>配套管理

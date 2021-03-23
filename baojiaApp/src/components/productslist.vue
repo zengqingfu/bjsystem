@@ -132,10 +132,9 @@ export default {
   data () {
     return {
       form: {
-        name: '',
-        company: '',
-        date: '',
-        content: '',
+        name: '寸拼接屏',
+        unit: '个',
+        content: '未税/未含拼接盒(拼接盒600)',
         class: '',
         brand: '三星',
         detail: '',

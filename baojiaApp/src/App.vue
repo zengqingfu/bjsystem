@@ -182,9 +182,11 @@ export default {
 }
 #projectdate{
   position: relative;
-  height: 90%;
-  overflow-x: scroll;
+  height: 88%;
+  overflow-y: scroll;
   margin-right: -14px;
+  border-bottom: 1px solid #eee;
+  border-left: 1px solid #eee;
 }
 
 .titletop .is-scrolling-none{
@@ -195,6 +197,33 @@ export default {
 }
 #projectdate .titletop .el-table__header-wrapper {
   display: block;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+#projectdate .el-textarea__inner {
+  border: none;
+  text-align: center;
+  background: none;
+  min-height: 80px !important;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+#projectdate .el-input__inner {
+  border: none;
+  text-align: center;
+  background: none;
+}
+.addlist .el-dialog {
+  margin: 0px !important;
+  position: absolute;
+  right: 0px;
+  width: 40%;
+}
+.addlist .v-modal {
+  display: none !important;
 }
 @media screen and (max-width: 780px) {
   .el-menu--collapse {
