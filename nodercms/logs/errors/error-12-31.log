@@ -1,5 +1,0 @@
-[2020-12-31 15:16:00.360] [ERROR] console - (node:25525) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
-(Use `node --trace-deprecation ...` to show where the warning was created)
-[2020-12-31 15:32:06.760] [ERROR] console - (node:25525) DeprecationWarning: `open()` is deprecated in mongoose >= 4.11.0, use `openUri()` instead, or set the `useMongoClient` option if using `connect()` or `createConnection()`. See http://mongoosejs.com/docs/connections.html#use-mongo-client
-[2020-12-31 15:32:06.772] [ERROR] access - PUT /api/install/test-database
-[2020-12-31 16:24:07.505] [ERROR] access - PUT /api/install/test-database

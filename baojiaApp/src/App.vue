@@ -182,11 +182,9 @@ export default {
 }
 #projectdate{
   position: relative;
-  height: 88%;
-  overflow-y: scroll;
+  height: 90%;
+  overflow-x: scroll;
   margin-right: -14px;
-  border-bottom: 1px solid #eee;
-  border-left: 1px solid #eee;
 }
 
 .titletop .is-scrolling-none{
