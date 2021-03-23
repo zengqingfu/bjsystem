@@ -58,7 +58,7 @@
       </el-form>
     </el-dialog>
     <el-dialog
-        class="addlist"
+        width="80%"
         title="配件列表"
         :visible.sync="productslistVisible"
         append-to-body>
@@ -77,7 +77,6 @@
             <div style="margin:0px 0px 30px 80px">
               <el-table :data="tableData_s" @row-click="pushproducts" border :summary-method="jsondata.getSummaries" id="expenditureContractlist" height='90%' style="width: 100%">
                 <el-table-column type="index"></el-table-column>
-<<<<<<< HEAD
                 <!-- <el-table-column prop="category" label="类别" width="80"></el-table-column> -->
                 <el-table-column prop="name" label="名称" ></el-table-column>
                 <el-table-column prop="brand" label="品牌" ></el-table-column>
@@ -86,18 +85,6 @@
                 <el-table-column prop="price" label="单价(元)" ></el-table-column>
                 <!-- <el-table-column prop="detail" label="工艺及材料说明"></el-table-column> -->
                 <!-- <el-table-column prop="content" label="备注" ></el-table-column> -->
-=======
-                <el-table-column prop="name" label="名称"></el-table-column>
-                <el-table-column prop="detail" label="参数" ></el-table-column>
-                <el-table-column prop="price" label="价格" sortable></el-table-column>
-                <el-table-column prop="class" label="分类" ></el-table-column>
-                <el-table-column prop="company" label="单位" ></el-table-column>
-                <el-table-column label="操作" >
-                  <template slot-scope="scope">
-                    <el-button @click="pushproducts(scope.row)" type="text" size="small">添加</el-button>
-                  </template>
-                </el-table-column>
->>>>>>> parent of be5746b... 修复错乱版本
               </el-table>
             </div>
            </el-form>
@@ -192,11 +179,44 @@
       </div>
       <table><tr><th colspan="1" > <h3>{{item.name}} --- {{item.projectclass}}</h3></th></tr></table>
       <el-table :data="item.products" border show-summary :summary-method="jsondata.getSummaries"  style="width: 100%">
-        <el-table-column prop="class" label="类别" ></el-table-column>
-        <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="price" label="价格" sortable></el-table-column>
-        <el-table-column prop="productsintnb" label="单位" ></el-table-column>
-        <el-table-column prop="money" label="总价" ></el-table-column>
+        <el-table-column prop="category" label="类别" width="80"></el-table-column>
+        <el-table-column prop="name" label="名称" width="180">
+          <template slot-scope="scope">
+            <el-input @input="projectsubData[item.indexid].products[scope.$index].name = scope.row.name; changeInput(projectsubData[item.indexid])" v-model="scope.row.name" ></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="brand" label="品牌" width="120">
+          <template slot-scope="scope">
+            <el-input @input="projectsubData[item.indexid].products[scope.$index].brand = scope.row.brand; changeInput(projectsubData[item.indexid])" v-model="scope.row.brand" ></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="数量" width="90">
+          <template slot-scope="scope">
+            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].productsintnb = scope.row.productsintnb; changeInput(projectsubData[item.indexid])" v-model="scope.row.productsintnb" ></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="unit" label="单位" width="70">
+          <template slot-scope="scope">
+            <el-input @input="projectsubData[item.indexid].products[scope.$index].unit = scope.row.unit; changeInput(projectsubData[item.indexid])" v-model="scope.row.unit" ></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="成本单价(元)" width="130">
+          <template slot-scope="scope">
+            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].cost = scope.row.cost; changeInput(projectsubData[item.indexid])" v-model="scope.row.cost" ><i slot="prefix" class="el-input__icon">￥</i></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单价(元)" width="130">
+          <template slot-scope="scope">
+            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].price = scope.row.price; changeInput(projectsubData[item.indexid])" v-model="scope.row.price" ><i slot="prefix" class="el-input__icon">￥</i></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="money" label="小计(元)" width="130"></el-table-column>
+        <el-table-column prop="detail" label="工艺及材料说明"></el-table-column>
+        <el-table-column prop="content" label="备注" >
+          <template slot-scope="scope">
+            <el-input type="textarea" @input="projectsubData[item.indexid].products[scope.$index].content = scope.row.content; changeInput(projectsubData[item.indexid])" v-model="scope.row.content" ></el-input>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" >
           <template slot-scope="scope">
             <el-button @click="redproducts(scope.$index, item)" type="text" size="small">删除</el-button>
@@ -275,8 +295,8 @@ export default {
           value: '一体机',
           label: '一体机',
           children: [{
-            value: '一体机(不触摸)',
-            label: '一体机(不触摸)'
+            value: '一体机（不触摸）',
+            label: '一体机（不触摸）'
           }, {
             value: '电容触摸一体机',
             label: '电容触摸一体机'
@@ -288,11 +308,11 @@ export default {
           value: '广告机',
           label: '广告机'
         }, {
-          value: '全息屏(带柜体)',
-          label: '全息屏(带柜体）'
+          value: '全息屏（带柜体）',
+          label: '全息屏（带柜体）'
         }, {
-          value: '全息屏(不带柜体)',
-          label: '全息屏(不带柜体)'
+          value: '全息屏（不带柜体）',
+          label: '全息屏（不带柜体）'
         }]
       }, {
         value: '广告物料',
@@ -335,8 +355,7 @@ export default {
       deleteprojectsub: '',
       tableData_s: [],
       subData: [],
-      projectsubData: [],
-      stringreplace: '---' // 换行字符串替换
+      projectsubData: []
     }
   },
   mounted () {
@@ -368,6 +387,21 @@ export default {
       this.serverproducts.id = rows.id
       this.updatpostData('projectsub', this.serverproducts)
     },
+    redproducts (index, rows) {
+      this.projectsubData[rows.indexid].products.splice(index, 1)
+      this.modifyjson(this.projectsubData[rows.indexid].products, rows.id)
+    },
+    updatpostData_products () {
+      this.subredproductsboxred = false
+      this.subredproductsred.money = Number(this.subredproductsred.productsintnb) * Number(this.subredproductsred.price)
+      this.modifyjson(this.modsubredproducts.products, this.modsubredproducts.id)
+    },
+    productssubmod (index, rows) {
+      this.subredproductsboxred = true
+      this.modsubredproducts = this.projectsubData[rows.indexid]
+      this.modsubredproducts.indexlist = index
+      this.subredproductsred = this.modsubredproducts.products[this.modsubredproducts.indexlist]
+    },
     async redsubproducts (projectsubid) {
       this.subredproductsbox = true
       this.subredproducts = await this.jsondata.getDataId('projectsub', projectsubid)
@@ -379,6 +413,7 @@ export default {
         this.productspushdata.price = this.productspushdata.price + '/' + this.productspushdata.company
         this.productspushdata.productsintnb = '共 ' + this.productsintnb + ' ' + this.productspushdata.company
         this.subData[this.pushproductsid].products.push(this.productspushdata)
+
       }
       if (this.templatelistVisible === true) {
         this.productstemplatedata = JSON.parse(this.productspushdata.productsid)
@@ -419,6 +454,27 @@ export default {
         //   this.subData[i].products[is].productsintnb = '共 ' + this.subData[i].products[is].productsintnb + ' ' + this.subData[i].products[is].company
         // }
         this.subData[i].indexid = i
+        this.projectsubData[i].indexid = i
+        for (let is = 0; is < this.subData[i].products.length; is++) {
+          this.subData[i].products[is].money = this.subData[i].products[is].price * this.subData[i].products[is].productsintnb
+          this.total_money += this.subData[i].products[is].money
+          this.subData[i].products[is].detail = this.subData[i].products[is].detail.replace(/------/g, '\n').replace(/---/g, '\n') // 格式化换行
+          this.subData[i].products[is].detail = this.subData[i].products[is].detail // 格式化换行
+          // this.subData[i].products[is].productsintnb = ' ' + this.subData[i].products[is].productsintnb
+          this.subData[i].products[is].money = this.jsondata.currency(this.subData[i].products[is].money, '￥', 2)
+          // this.subData[i].products[is].price = this.jsondata.currency(this.subData[i].products[is].price, '￥', 2)
+          // this.subData[i].products[is].cost = this.jsondata.currency(this.subData[i].products[is].cost, '￥', 2)
+        }
+      }
+      for (let i = 0; i < this.subData.length; i++) {
+        this.subData[i].showtitle = true
+        this.subData[i].showsub = false
+        if (i !== 0 && this.subData[i].name === this.subData[i - 1].name) {
+          this.subData[i].showtitle = false
+        }
+        if (this.subData[i].projectclass !== '') {
+          this.subData[i].showsub = true
+        }
       }
       this.templateData = await this.jsondata.getData('template')
       for (let i = 0; i < this.templateData.length; i++) {
@@ -437,8 +493,8 @@ export default {
       if (await this.jsondata.updatpostData(list, formdata) === 'OK') {
         this.dialogFormVisible = false
         this.productsintbox = false
-        // this.productslistVisible = false
-        // this.templatelistVisible = false
+        this.productslistVisible = false
+        this.templatelistVisible = false
         if (list === 'project') {
           this.$router.push('/index/')
         } else {
