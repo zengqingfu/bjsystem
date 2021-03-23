@@ -195,8 +195,8 @@
         <el-table-column prop="category" label="类别" width="80"></el-table-column>
         <el-table-column prop="name" label="名称" width="180"></el-table-column>
         <el-table-column prop="brand" label="品牌" width="120"></el-table-column>
-        <el-table-column prop="productsintnb" label="数量" width="90"></el-table-column>
-        <el-table-column prop="unit" label="单位" width="70"></el-table-column>
+        <el-table-column prop="productsintnb" label="数量" width="80"></el-table-column>
+        <el-table-column prop="unit" label="单位" width="50"></el-table-column>
         <el-table-column prop="cost" label="成本单价(元)" width="130"></el-table-column>
         <el-table-column prop="price" label="单价(元)" width="130"></el-table-column>
         <el-table-column prop="money" label="小计(元)" width="130"></el-table-column>
@@ -264,8 +264,8 @@
         </el-table-column>
         <el-table-column label="操作" >
           <template slot-scope="scope">
-            <el-button @click="upGo(projectsubData[item.indexid], scope.$index)" type="text" size="small"><i class="el-icon-top"></i></el-button>
-            <el-button @click="downGo(projectsubData[item.indexid], scope.$index)" type="text" size="small"><i class="el-icon-bottom"></i></el-button>
+            <el-button @click="upGo(projectsubData[item.indexid], scope.$index, item.indexid)" type="text" size="small"><i class="el-icon-top"></i></el-button>
+            <el-button @click="downGo(projectsubData[item.indexid], scope.$index, item.indexid)" type="text" size="small"><i class="el-icon-bottom"></i></el-button>
             <!-- <el-button type="text" @click="productssubmod(scope.$index, item)" size="small">调整信息</el-button> -->
             <el-button @click="redproducts(scope.$index, item)" type="text" size="small">删除</el-button>
           </template>
@@ -436,10 +436,6 @@ export default {
     // }
   },
   methods: {
-    changeInput (listdata) {
-      console.log(listdata)
-      this.modifyjson(listdata.products, listdata.id)
-    },
     modifyjson (datajson, indexid) { // 更新数据
       this.serverproducts.products = JSON.stringify(datajson)
       this.serverproducts.id = indexid
