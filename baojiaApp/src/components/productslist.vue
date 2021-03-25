@@ -33,7 +33,7 @@
         <el-form-item label="分类" prop="class">
           <el-cascader
             v-model="form.class"
-            :options="productsclass"
+            :options="jsondata.listjson()"
             :props="{ expandTrigger: 'hover' }"
             @change="handleChange"
             clearable
@@ -81,7 +81,7 @@
         <el-form-item label="分类" prop="class">
           <el-cascader
             v-model="form.class"
-            :options="productsclass"
+            :options="jsondata.listjson()"
             :props="{ expandTrigger: 'hover' }"
             @change="handleChange"
             clearable
@@ -132,89 +132,15 @@ export default {
   data () {
     return {
       form: {
-        name: '寸拼接屏',
+        name: '',
         unit: '个',
-        content: '未税/未含拼接盒(拼接盒600)',
+        content: '无',
         class: '',
-        brand: '三星',
+        brand: '',
         detail: '',
         price: ''
       },
       productsclassvalue: [],
-      productsclass: [{
-        value: '道具',
-        label: '道具',
-        children: [{
-          value: 'fankui',
-          label: '反馈'
-        }, {
-          value: 'xiaolv',
-          label: '效率'
-        }, {
-          value: 'kekong',
-          label: '可控'
-        }]
-      }, {
-        value: 'LED屏',
-        label: 'LED屏'
-      }, {
-        value: '投影',
-        label: '投影'
-      }, {
-        value: '屏幕',
-        label: '屏幕',
-        children: [{
-          value: '拼接屏',
-          label: '拼接屏',
-          children: [{
-            value: '进口',
-            label: '进口'
-          }, {
-            value: '国产',
-            label: '国产'
-          }]
-        }, {
-          value: '一体机',
-          label: '一体机',
-          children: [{
-            value: '一体机（不触摸）',
-            label: '一体机（不触摸）'
-          }, {
-            value: '电容触摸一体机',
-            label: '电容触摸一体机'
-          }, {
-            value: '红外触摸一体机',
-            label: '红外触摸一体机'
-          }]
-        }, {
-          value: '广告机',
-          label: '广告机'
-        }, {
-          value: '全息屏（带柜体）',
-          label: '全息屏（带柜体）'
-        }, {
-          value: '全息屏（不带柜体）',
-          label: '全息屏（不带柜体）'
-        }]
-      }, {
-        value: '广告物料',
-        label: '广告物料'
-      }, {
-        value: '模型',
-        label: '模型'
-      }, {
-        value: '艺术装置',
-        label: '艺术装置'
-      }, {
-        value: '配件',
-        label: '配件'
-      }, {
-        value: '程序',
-        label: '程序'
-      }, {
-        value: '视频',
-        label: '视频'
-      }],
       outerVisible: false,
       tableData_s: [],
       table: [],
@@ -343,7 +269,7 @@ export default {
     play (input) {
       let _this = this
       _this.table = _this.tableData.filter(Val => {
-        if (Val.name.includes(input)) {
+        if (Val.name.includes(input) || Val.class.includes(input) || Val.brand.includes(input) || Val.detail.includes(input)) {
           _this.table.push(Val)
           return _this.table
         }

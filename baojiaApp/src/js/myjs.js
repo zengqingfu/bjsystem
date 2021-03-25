@@ -10,6 +10,92 @@ const geturl = (geturlFn) => { // 环境变量,放到域名bigmind上
 }
 // console.log(geturl())
 export default {
+  stringreplace_up (dataup) {
+    return dataup.replace(/\n/g, '---').replace(/\r/g, '---') // 格式化换行
+  },
+  stringreplace_ld (datald) {
+    return datald.replace(new RegExp('------', 'g'), '\n').replace(new RegExp('---', 'g'), '\n')
+  },
+  listjson () {
+    let productsclass = [{
+      value: '道具',
+      label: '道具',
+      children: [{
+        value: 'fankui',
+        label: '反馈'
+      }, {
+        value: 'xiaolv',
+        label: '效率'
+      }, {
+        value: 'kekong',
+        label: '可控'
+      }]
+    }, {
+      value: 'LED屏',
+      label: 'LED屏'
+    }, {
+      value: '投影',
+      label: '投影'
+    }, {
+      value: '屏幕',
+      label: '屏幕',
+      children: [{
+        value: '拼接屏',
+        label: '拼接屏',
+        children: [{
+          value: '进口',
+          label: '进口'
+        }, {
+          value: '国产',
+          label: '国产'
+        }, {
+          value: '配件',
+          label: '配件'
+        }]
+      }, {
+        value: '一体机',
+        label: '一体机',
+        children: [{
+          value: '一体机(不触摸)',
+          label: '一体机(不触摸)'
+        }, {
+          value: '电容触摸一体机',
+          label: '电容触摸一体机'
+        }, {
+          value: '红外触摸一体机',
+          label: '红外触摸一体机'
+        }]
+      }, {
+        value: '广告机',
+        label: '广告机'
+      }, {
+        value: '全息屏(带柜体)',
+        label: '全息屏(带柜体）'
+      }, {
+        value: '全息屏(不带柜体)',
+        label: '全息屏(不带柜体)'
+      }]
+    }, {
+      value: '广告物料',
+      label: '广告物料'
+    }, {
+      value: '模型',
+      label: '模型'
+    }, {
+      value: '艺术装置',
+      label: '艺术装置'
+    }, {
+      value: '配件',
+      label: '配件'
+    }, {
+      value: '程序',
+      label: '程序'
+    }, {
+      value: '视频',
+      label: '视频'
+    }]
+    return productsclass
+  },
   fordata (data1, data2, listclass1, listclass2) { // 循环函数
     for (let i = 0; i < data1.length; i++) {
       for (let is = 0; is < data2.length; is++) {

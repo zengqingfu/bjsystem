@@ -206,7 +206,7 @@ input::-webkit-inner-spin-button {
   border: none;
   text-align: center;
   background: none;
-  min-height: 80px !important;
+  min-width: 350px;
 }
 input[type="number"] {
   -moz-appearance: textfield;

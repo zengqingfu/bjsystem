@@ -102,7 +102,7 @@
           <el-form ref="form" :rules="rules"  label-width="80px" class="demo-ruleForm">
             <el-form-item label="分类" prop="class" style="width:60%;display: inline-block;">
               <el-cascader
-                :options="productsclass"
+                :options="jsondata.listjson()"
                 :props="{ expandTrigger: 'hover' }"
                 @change="handleChange"
                 clearable
@@ -127,14 +127,14 @@
            </el-form>
     </el-dialog>
     <el-dialog
-        width="80%"
+        class="addlist"
         title="配套列表"
         :visible.sync="templatelistVisible"
         append-to-body>
           <el-form ref="form" :rules="rules"  label-width="80px" class="demo-ruleForm">
             <el-form-item label="分类" prop="class" style="width:60%;display: inline-block;">
               <el-cascader
-                :options="productsclass"
+                :options="jsondata.listjson()"
                 :props="{ expandTrigger: 'hover' }"
                 @change="handleChange"
                 clearable
@@ -192,17 +192,17 @@
     <div class="titledivbox">
       <table><tr><th colspan="8" ><h3 >总额：{{total_money}}</h3></th></tr></table>
       <el-table :data="gongcheng" border show-summary :summary-method="jsondata.getSummaries" class="titletop" style="width: 100%">
-        <el-table-column prop="category" label="类别" width="80"></el-table-column>
+        <el-table-column prop="category" label="类别" width="101"></el-table-column>
         <el-table-column prop="name" label="名称" width="180"></el-table-column>
         <el-table-column prop="brand" label="品牌" width="120"></el-table-column>
         <el-table-column prop="productsintnb" label="数量" width="90"></el-table-column>
         <el-table-column prop="unit" label="单位" width="70"></el-table-column>
         <el-table-column prop="cost" label="成本单价(元)" width="130"></el-table-column>
         <el-table-column prop="price" label="单价(元)" width="130"></el-table-column>
-        <el-table-column prop="money" label="小计(元)" width="130"></el-table-column>
+        <el-table-column prop="money" label="小计(元)" width="140"></el-table-column>
         <el-table-column prop="detail" label="工艺及材料说明"></el-table-column>
         <el-table-column prop="content" label="备注" ></el-table-column>
-        <el-table-column label="操作" ></el-table-column>
+        <el-table-column label="操作" width="150"></el-table-column>
       </el-table>
     </div>
     <div id="projectdate">
@@ -216,53 +216,53 @@
       <table v-show="item.showtitle" style="width: -webkit-fill-available;background-color:rgb(1 82 144);"><tr><th colspan="1" ><h3 style="color:#fff;margin:8px 20px">{{item.name}}<span style="font-size:14px"> --- 导出单项</span></h3></th></tr></table>
       <table v-show="item.showsub" style="width: -webkit-fill-available;background-color:rgb(164 204 175)"><tr><th colspan="1"><p style="color:#fff;margin:8px 20px">{{item.projectclass}}<span style="font-size:14px"> --- 导出单项</span></p></th></tr></table>
       <el-table :data="item.products" border show-summary :summary-method="jsondata.getSummaries"  style="width: 100%">
-        <el-table-column prop="category" label="类别" width="80"></el-table-column>
+        <el-table-column prop="category" label="类别" width="100"></el-table-column>
         <el-table-column prop="name" label="名称" width="180">
           <template slot-scope="scope">
-            <el-input @input="changeInput(projectsubData[item.indexid])" v-model="projectsubData[item.indexid].products[scope.$index].name" ></el-input>
+            <el-input @input="projectsubData[item.indexid].products[scope.$index].name = scope.row.name; changeInput(projectsubData[item.indexid])" v-model="scope.row.name" ></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="brand" label="品牌" width="120">
           <template slot-scope="scope">
-            <el-input @input="changeInput(projectsubData[item.indexid])" v-model="projectsubData[item.indexid].products[scope.$index].brand" ></el-input>
+            <el-input @input="projectsubData[item.indexid].products[scope.$index].brand = scope.row.brand; changeInput(projectsubData[item.indexid])" v-model="scope.row.brand" ></el-input>
           </template>
         </el-table-column>
         <el-table-column label="数量" width="90">
           <template slot-scope="scope">
-            <el-input type="number" @input="changeInput(projectsubData[item.indexid])" v-model="projectsubData[item.indexid].products[scope.$index].productsintnb" ></el-input>
+            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].productsintnb = scope.row.productsintnb; changeInput(projectsubData[item.indexid], scope.$index)" v-model="scope.row.productsintnb" ></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="unit" label="单位" width="70">
           <template slot-scope="scope">
-            <el-input @input="changeInput(projectsubData[item.indexid])" v-model="projectsubData[item.indexid].products[scope.$index].unit" ></el-input>
+            <el-input @input="projectsubData[item.indexid].products[scope.$index].unit = scope.row.unit; changeInput(projectsubData[item.indexid])" v-model="scope.row.unit" ></el-input>
           </template>
         </el-table-column>
         <el-table-column label="成本单价(元)" width="130">
           <template slot-scope="scope">
-            <el-input type="number" @input="changeInput(projectsubData[item.indexid])" v-model="projectsubData[item.indexid].products[scope.$index].cost"><i slot="prefix" class="el-input__icon">￥</i></el-input>
+            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].cost = scope.row.cost; changeInput(projectsubData[item.indexid])" v-model="scope.row.cost"><i slot="prefix" class="el-input__icon">￥</i></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单价(元)" width="130">
           <template slot-scope="scope">
-            <el-input type="number" @input="changeInput(projectsubData[item.indexid])" v-model="projectsubData[item.indexid].products[scope.$index].price" ><i slot="prefix" class="el-input__icon">￥</i></el-input>
+            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].price = scope.row.price; changeInput(projectsubData[item.indexid])" v-model="scope.row.price" ><i slot="prefix" class="el-input__icon">￥</i></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="money" label="小计(元)" width="140">
           <template slot-scope="scope">
-            <el-input @input="changeInput(projectsubData[item.indexid])" v-model="scope.row.money" ></el-input>
+            <el-input v-model="scope.row.money" ></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="detail" label="工艺及材料说明">
           <template slot-scope="scope">
-            <el-input type="textarea" @input="projectsubData[item.indexid].products[scope.$index].detail = scope.row.detail.replace(/\n/g, stringreplace).replace(/\r/g, stringreplace); changeInput(projectsubData[item.indexid])" v-model="scope.row.detail" ></el-input>
+            <el-input type="textarea" @input="projectsubData[item.indexid].products[scope.$index].detail = jsondata.stringreplace_up(scope.row.detail); changeInput(projectsubData[item.indexid])" v-model="scope.row.detail" autosize></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="content" label="备注" >
           <template slot-scope="scope">
-            <el-input type="textarea" @input="projectsubData[item.indexid].products[scope.$index].content = scope.row.content.replace(/\n/g, stringreplace).replace(/\r/g, stringreplace); changeInput(projectsubData[item.indexid])" v-model="scope.row.content" ></el-input>
+            <el-input type="textarea" @input="projectsubData[item.indexid].products[scope.$index].content = jsondata.stringreplace_up(scope.row.content); changeInput(projectsubData[item.indexid])" v-model="scope.row.content" autosize></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="操作" >
+        <el-table-column label="操作" width="150" >
           <template slot-scope="scope">
             <el-button @click="upGo(projectsubData[item.indexid], scope.$index)" type="text" size="small"><i class="el-icon-top"></i></el-button>
             <el-button @click="downGo(projectsubData[item.indexid], scope.$index)" type="text" size="small"><i class="el-icon-bottom"></i></el-button>
@@ -282,6 +282,7 @@
 export default {
   data () {
     return {
+      textarea1: '',
       total_money: 0,
       subredproductsred: {},
       subredproductsboxred: false,
@@ -313,80 +314,6 @@ export default {
       productstemplatedata: [],
       gongcheng: [],
       yewu: [],
-      productsclass: [{
-        value: '道具',
-        label: '道具',
-        children: [{
-          value: 'fankui',
-          label: '反馈'
-        }, {
-          value: 'xiaolv',
-          label: '效率'
-        }, {
-          value: 'kekong',
-          label: '可控'
-        }]
-      }, {
-        value: 'LED屏',
-        label: 'LED屏'
-      }, {
-        value: '投影',
-        label: '投影'
-      }, {
-        value: '屏幕',
-        label: '屏幕',
-        children: [{
-          value: '拼接屏',
-          label: '拼接屏',
-          children: [{
-            value: '进口',
-            label: '进口'
-          }, {
-            value: '国产',
-            label: '国产'
-          }]
-        }, {
-          value: '一体机',
-          label: '一体机',
-          children: [{
-            value: '一体机(不触摸)',
-            label: '一体机(不触摸)'
-          }, {
-            value: '电容触摸一体机',
-            label: '电容触摸一体机'
-          }, {
-            value: '红外触摸一体机',
-            label: '红外触摸一体机'
-          }]
-        }, {
-          value: '广告机',
-          label: '广告机'
-        }, {
-          value: '全息屏(带柜体)',
-          label: '全息屏(带柜体）'
-        }, {
-          value: '全息屏(不带柜体)',
-          label: '全息屏(不带柜体)'
-        }]
-      }, {
-        value: '广告物料',
-        label: '广告物料'
-      }, {
-        value: '模型',
-        label: '模型'
-      }, {
-        value: '艺术装置',
-        label: '艺术装置'
-      }, {
-        value: '配件',
-        label: '配件'
-      }, {
-        value: '程序',
-        label: '程序'
-      }, {
-        value: '视频',
-        label: '视频'
-      }],
       serverproducts: {},
       zhongshouru: '',
       weishoukuan: '',
@@ -409,14 +336,13 @@ export default {
       deleteprojectsub: '',
       tableData_s: [],
       subData: [],
-      projectsubData: [],
-      stringreplace: '---' // 换行字符串替换
+      projectsubData: []
     }
   },
   mounted () {
-    // this.getFormData('supplierlist')
     // this.getFormDataClass('expenditureclass')
     this.getdata()
+    this.getFormData('supplierlist')
   },
   watch: {
     // subData: {// 深度监听，可监听到对象、数组的变化
@@ -436,8 +362,14 @@ export default {
     // }
   },
   methods: {
-    changeInput (listdata) {
-      console.log(listdata)
+    changeInput (listdata, indexid) {
+      if (listdata.products[indexid].Matchingid && !listdata.products[indexid].basicint) {
+        for (let i = 0; i < listdata.products.length; i++) {
+          if (listdata.products[i].Matchingid === listdata.products[indexid].Matchingid && listdata.products[i].basicint) {
+            listdata.products[i].productsintnb = listdata.products[indexid].productsintnb * listdata.products[i].basicint
+          }
+        }
+      }
       this.modifyjson(listdata.products, listdata.id)
     },
     modifyjson (datajson, indexid) { // 更新数据
@@ -446,9 +378,8 @@ export default {
       this.updatpostData('projectsub', this.serverproducts)
     },
     redproducts (index, rows) {
-      // console.log(this.projectsubData[rows.indexid].products)
-      // this.projectsubData[rows.indexid].products.splice(index, 1)
-      // this.modifyjson(this.projectsubData[rows.indexid].products, rows.id)
+      this.projectsubData[rows.indexid].products.splice(index, 1)
+      this.modifyjson(this.projectsubData[rows.indexid].products, rows.id)
     },
     updatpostData_products () {
       this.subredproductsboxred = false
@@ -466,16 +397,21 @@ export default {
       this.subredproducts = await this.jsondata.getDataId('projectsub', projectsubid)
     },
     productspushsub () {
+      // console.log(this.productspushdata)
       if (this.productslistVisible === true) {
-        this.productspushdata.detail = this.productspushdata.detail.replace(/\n/g, this.stringreplace).replace(/\r/g, this.stringreplace) // 格式化换行
+        this.productspushdata.detail = this.jsondata.stringreplace_up(this.productspushdata.detail)
+        this.productspushdata.content = this.jsondata.stringreplace_up(this.productspushdata.content)
         this.productspushdata.productsintnb = Number(this.productsintnb)
         this.projectsubData[this.pushproductsid].products.push(this.productspushdata)
       }
       if (this.templatelistVisible === true) {
         this.productstemplatedata = JSON.parse(this.productspushdata.productsid)
+        let matchingid = this.projectsubData[this.pushproductsid].products.length
         for (let i = 0; i < this.productstemplatedata.length; i++) {
+          this.productstemplatedata[i].detail = this.jsondata.stringreplace_up(this.productstemplatedata[i].detail)
+          this.productstemplatedata[i].content = this.jsondata.stringreplace_up(this.productstemplatedata[i].content)
           this.productstemplatedata[i].productsintnb = Number(this.productsintnb)
-          this.productstemplatedata[i].money = Number(this.productstemplatedata[i].productsintnb) * Number(this.productstemplatedata[i].price)
+          this.productstemplatedata[i].Matchingid = matchingid + 1
           this.projectsubData[this.pushproductsid].products.push(this.productstemplatedata[i])
         }
       }
@@ -495,6 +431,20 @@ export default {
       this.play(this.inputData)
       this.templateplay(this.inputData)
     },
+    async getFormData () {
+      this.templateData = await this.jsondata.getData('template')
+      for (let i = 0; i < this.templateData.length; i++) {
+        this.templateData[i].productsint = 1
+        this.templateData[i].class = this.jsondata.classstrog(this.templateData[i].class)
+      }
+      this.templateData_s = this.templateData
+      this.tableData = await this.jsondata.getData('products')
+      for (let i = 0; i < this.tableData.length; i++) {
+        this.tableData[i].productsint = 1
+        this.tableData[i].class = this.jsondata.classstrog(this.tableData[i].class)
+      }
+      this.tableData_s = this.tableData
+    },
     async getdata () {
       this.total_money = 0
       this.form = await this.jsondata.getDataId('project', this.$route.params.id)
@@ -510,14 +460,18 @@ export default {
         this.subData[i].indexid = i
         this.projectsubData[i].indexid = i
         for (let is = 0; is < this.subData[i].products.length; is++) {
+          // console.log(this.subData[i].products[is])
+          if (this.subData[i].products[is].Matchingid) {
+            this.subData[i].products[is].category += '-' + this.subData[i].products[is].Matchingid + '#'
+          }
           this.subData[i].products[is].money = this.subData[i].products[is].price * this.subData[i].products[is].productsintnb
           this.total_money += this.subData[i].products[is].money
-          this.subData[i].products[is].detail = this.subData[i].products[is].detail.replace(new RegExp(this.stringreplace + this.stringreplace, 'g'), '\n').replace(new RegExp(this.stringreplace, 'g'), '\n') // 格式化换行
-          this.subData[i].products[is].content = this.subData[i].products[is].content.replace(new RegExp(this.stringreplace + this.stringreplace, 'g'), '\n').replace(new RegExp(this.stringreplace, 'g'), '\n') // 格式化换行
-          this.subData[i].products[is].productsintnb = ' ' + this.subData[i].products[is].productsintnb
+          this.subData[i].products[is].detail = this.jsondata.stringreplace_ld(this.subData[i].products[is].detail)// 格式化换行
+          this.textarea1 = this.subData[i].products[is].detail
+          this.subData[i].products[is].content = this.jsondata.stringreplace_ld(this.subData[i].products[is].content)// 格式化换行
           this.subData[i].products[is].money = this.jsondata.currency(this.subData[i].products[is].money, '￥', 2)
-          this.subData[i].products[is].price = this.jsondata.currency(this.subData[i].products[is].price, '￥', 2)
-          this.subData[i].products[is].cost = this.jsondata.currency(this.subData[i].products[is].cost, '￥', 2)
+          // this.subData[i].products[is].price = this.jsondata.currency(this.subData[i].products[is].price, '￥', 2)
+          // this.subData[i].products[is].cost = this.jsondata.currency(this.subData[i].products[is].cost, '￥', 2)
         }
       }
       for (let i = 0; i < this.subData.length; i++) {
@@ -531,18 +485,6 @@ export default {
         }
       }
       this.total_money = this.jsondata.currency(this.total_money, '￥', 2)
-      this.templateData = await this.jsondata.getData('template')
-      for (let i = 0; i < this.templateData.length; i++) {
-        this.templateData[i].productsint = 1
-        this.templateData[i].class = this.jsondata.classstrog(this.templateData[i].class)
-      }
-      this.templateData_s = this.templateData
-      this.tableData = await this.jsondata.getData('products')
-      for (let i = 0; i < this.tableData.length; i++) {
-        this.tableData[i].productsint = 1
-        this.tableData[i].class = this.jsondata.classstrog(this.tableData[i].class)
-      }
-      this.tableData_s = this.tableData
     },
     async updatpostData (list, formdata) { // 更新数据
       if (await this.jsondata.updatpostData(list, formdata) === 'OK') {
