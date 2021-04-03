@@ -229,7 +229,7 @@
         </el-table-column>
         <el-table-column label="数量" width="90">
           <template slot-scope="scope">
-            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].productsintnb = scope.row.productsintnb; changeInput(projectsubData[item.indexid], scope.$index)" v-model="scope.row.productsintnb" ></el-input>
+            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].productsintnb = scope.row.productsintnb; changeInputint(projectsubData[item.indexid], scope.$index)" v-model="scope.row.productsintnb" ></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="unit" label="单位" width="70">
@@ -363,8 +363,12 @@ export default {
   },
   methods: {
     changeInput (listdata, indexid) {
+      this.modifyjson(listdata.products, listdata.id)
+    },
+    changeInputint (listdata, indexid) {
       if (listdata.products[indexid].Matchingid && !listdata.products[indexid].basicint) {
         for (let i = 0; i < listdata.products.length; i++) {
+          console.log(listdata.products[i].Matchingid)
           if (listdata.products[i].Matchingid === listdata.products[indexid].Matchingid && listdata.products[i].basicint) {
             listdata.products[i].productsintnb = listdata.products[indexid].productsintnb * listdata.products[i].basicint
           }

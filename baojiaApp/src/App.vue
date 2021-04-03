@@ -184,11 +184,12 @@ export default {
   position: relative;
   height: 88%;
   overflow-y: scroll;
-  margin-right: -14px;
   border-bottom: 1px solid #eee;
   border-left: 1px solid #eee;
 }
-
+.titledivbox .el-table__body-wrapper{
+  display:none;
+}
 .titletop .is-scrolling-none{
   display: none;
 }
