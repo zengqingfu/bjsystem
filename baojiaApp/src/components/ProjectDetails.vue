@@ -217,7 +217,7 @@
       <table v-show="item.showsub" style="width: -webkit-fill-available;background-color:rgb(164 204 175)"><tr><th colspan="1"><p style="color:#fff;margin:8px 20px">{{item.projectclass}}<span style="font-size:14px"> --- 导出单项</span></p></th></tr></table>
       <el-table :data="item.products" border show-summary :summary-method="jsondata.getSummaries"  style="width: 100%">
         <el-table-column prop="category" label="类别" width="100"></el-table-column>
-        <el-table-column prop="name" label="名称" width="180">
+        <el-table-column prop="name" label="名称" width="200">
           <template slot-scope="scope">
             <el-input @input="projectsubData[item.indexid].products[scope.$index].name = scope.row.name; changeInput(projectsubData[item.indexid])" v-model="scope.row.name" ></el-input>
           </template>
@@ -368,7 +368,7 @@ export default {
     changeInputint (listdata, indexid) {
       if (listdata.products[indexid].Matchingid && !listdata.products[indexid].basicint) {
         for (let i = 0; i < listdata.products.length; i++) {
-          console.log(listdata.products[i].Matchingid)
+          // console.log(listdata.products[i].Matchingid)
           if (listdata.products[i].Matchingid === listdata.products[indexid].Matchingid && listdata.products[i].basicint) {
             listdata.products[i].productsintnb = listdata.products[indexid].productsintnb * listdata.products[i].basicint
           }
@@ -401,8 +401,12 @@ export default {
       this.subredproducts = await this.jsondata.getDataId('projectsub', projectsubid)
     },
     productspushsub () {
-      // console.log(this.productspushdata)
       if (this.productslistVisible === true) {
+        for (let item in this.productspushdata) {
+          if (this.productspushdata[item] === null) {
+            this.productspushdata[item] = ''
+          }
+        }
         this.productspushdata.detail = this.jsondata.stringreplace_up(this.productspushdata.detail)
         this.productspushdata.content = this.jsondata.stringreplace_up(this.productspushdata.content)
         this.productspushdata.productsintnb = Number(this.productsintnb)
@@ -412,6 +416,11 @@ export default {
         this.productstemplatedata = JSON.parse(this.productspushdata.productsid)
         let matchingid = this.projectsubData[this.pushproductsid].products.length
         for (let i = 0; i < this.productstemplatedata.length; i++) {
+          for (let item in this.productstemplatedata[i]) {
+            if (this.productstemplatedata[i][item] === null) {
+              this.productstemplatedata[i][item] = ''
+            }
+          }
           this.productstemplatedata[i].detail = this.jsondata.stringreplace_up(this.productstemplatedata[i].detail)
           this.productstemplatedata[i].content = this.jsondata.stringreplace_up(this.productstemplatedata[i].content)
           this.productstemplatedata[i].productsintnb = Number(this.productsintnb)
@@ -549,7 +558,7 @@ export default {
     play (input) {
       let _this = this
       _this.table = _this.tableData.filter(Val => {
-        if (Val.name.includes(input) || Val.class.includes(input) || Val.cost.includes(input)) {
+        if (Val.name.includes(input) || Val.class.includes(input)) { // || Val.cost.includes(input)
           _this.table.push(Val)
           return _this.table
         }

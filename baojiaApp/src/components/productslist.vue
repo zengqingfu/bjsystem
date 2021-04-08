@@ -4,7 +4,19 @@
       <span  @click="goToHome" style="cursor: pointer;color:#409EFF">{{this.projectName}}</span>配件列表
       <el-button type="primary" style="float: right;" @click="dialogFormVisible = true">添加配件</el-button>
       <el-button style="float: right;margin-right:20px" onclick="exportExcel('#expenditureContractlist')">点击导出</el-button>
-      <el-input v-model="inputData" placeholder="请输入搜索内容" @input="play(inputData)" style="width:200px;float: right;;margin-right:0px"></el-input>
+      <el-form ref="form" :rules="rules"  label-width="80px" class="demo-ruleForm" style="width:50%;display: inline-block;">
+        <el-form-item label="分类" >
+          <el-cascader
+            :options="jsondata.listjson()"
+            :props="{ expandTrigger: 'hover' }"
+            @change="handleChange"
+            clearable
+            filterable
+            style="width:46%;">
+          </el-cascader>
+        </el-form-item>
+      </el-form>
+      <el-input v-model="inputData" placeholder="请输入搜索内容" @input="play(inputData)" style="width:20%;float: right;;margin-right:0px"></el-input>
     </h3>
     <el-dialog title="添加配件" :visible.sync="dialogFormVisible">
       <el-form ref="form" :model="form" :rules="rules"  label-width="100px" class="demo-ruleForm">
@@ -200,8 +212,10 @@ export default {
   },
   methods: {
     handleChange (value) {
-      // this.form.class = JSON.stringify(value)
-      console.log(value)
+      this.inputData = JSON.stringify(value)
+      this.inputData = this.jsondata.classstrog(this.inputData)
+      this.play(this.inputData)
+      console.log(this.inputData)
     },
     submitFormModify (formName) {
       this.$refs[formName].validate((valid) => {
@@ -269,7 +283,7 @@ export default {
     play (input) {
       let _this = this
       _this.table = _this.tableData.filter(Val => {
-        if (Val.name.includes(input) || Val.class.includes(input) || Val.brand.includes(input) || Val.detail.includes(input)) {
+        if (Val.name.includes(input) || Val.class.includes(input)) { // || Val.brand.includes(input) || Val.detail.includes(input)
           _this.table.push(Val)
           return _this.table
         }

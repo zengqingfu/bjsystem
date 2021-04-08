@@ -4,6 +4,18 @@
       <span  @click="goToHome" style="cursor: pointer;color:#409EFF">{{this.projectName}}</span>配套列表
       <el-button type="primary" style="float: right;" @click="dialogFormVisible = true">添加配套模版</el-button>
       <el-button style="float: right;margin-right:20px" onclick="exportExcel('#expenditureContractlist')">点击导出</el-button>
+      <el-form ref="form" :rules="rules"  label-width="80px" class="demo-ruleForm" style="width:60%;display: inline-block;">
+        <el-form-item label="分类" prop="class" >
+          <el-cascader
+            :options="jsondata.listjson()"
+            :props="{ expandTrigger: 'hover' }"
+            @change="handleChange"
+            clearable
+            filterable
+            style="width:46%;">
+          </el-cascader>
+        </el-form-item>
+      </el-form>
       <el-input v-model="inputData" placeholder="请输入搜索内容" @input="playlist(inputData)" style="width:200px;float: right;margin-right:0px"></el-input>
     </h3>
     <el-dialog title="添加配套模版" :visible.sync="dialogFormVisible">

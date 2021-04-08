@@ -216,6 +216,7 @@ input[type="number"] {
   border: none;
   text-align: center;
   background: none;
+  padding: 0px;
 }
 .addlist .el-dialog {
   margin: 0px !important;

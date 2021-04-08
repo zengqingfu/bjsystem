@@ -18,24 +18,24 @@ export default {
   },
   listjson () {
     let productsclass = [{
-      value: '道具',
-      label: '道具',
-      children: [{
-        value: 'fankui',
-        label: '反馈'
-      }, {
-        value: 'xiaolv',
-        label: '效率'
-      }, {
-        value: 'kekong',
-        label: '可控'
-      }]
-    }, {
-      value: 'LED屏',
-      label: 'LED屏'
-    }, {
       value: '投影',
-      label: '投影'
+      label: '投影',
+      children: [{
+        value: '激光投影机',
+        label: '激光投影机'
+      }, {
+        value: '激光投影机配件',
+        label: '激光投影机配件'
+      }, {
+        value: 'DLP激光投影机',
+        label: 'DLP激光投影机'
+      }, {
+        value: '3DLP激光投影机',
+        label: '3DLP激光投影机'
+      }, {
+        value: 'DLP激光投影机配件',
+        label: 'DLP激光投影机配件'
+      }]
     }, {
       value: '屏幕',
       label: '屏幕',
@@ -76,23 +76,183 @@ export default {
         label: '全息屏(不带柜体)'
       }]
     }, {
+      value: '线材',
+      label: '线材'
+    }, {
+      value: '全息屏风扇',
+      label: '全息屏风扇'
+    }, {
+      value: '灯具',
+      label: '灯具',
+      children: [{
+        value: '埋地灯',
+        label: '埋地灯'
+      }, {
+        value: '点光源',
+        label: '点光源'
+      }, {
+        value: 'LED 软灯带',
+        label: 'LED 软灯带'
+      }, {
+        value: 'LED 投光灯',
+        label: 'LED 投光灯'
+      }, {
+        value: 'LED 线型洗墙灯',
+        label: 'LED 线型洗墙灯'
+      }, {
+        value: 'LED 线型轮廓灯',
+        label: 'LED 线型轮廓灯'
+      }, {
+        value: '壁灯',
+        label: '壁灯'
+      }, {
+        value: '窗台灯',
+        label: '窗台灯'
+      }, {
+        value: '水池灯',
+        label: '水池灯'
+      }, {
+        value: '窗台灯',
+        label: '窗台灯'
+      }, {
+        value: '射灯',
+        label: '射灯'
+      }, {
+        value: '投影灯',
+        label: '投影灯'
+      }]
+    }, {
+      value: '音响系统',
+      label: '音响系统'
+    }, {
+      value: '服务器',
+      label: '服务器'
+    }, {
+      value: '沙盘模型',
+      label: '沙盘模型'
+    }, {
+      value: '舞美灯光',
+      label: '舞美灯光'
+    }, {
+      value: 'LED',
+      label: 'LED',
+      children: [{
+        value: 'LED 屏幕',
+        label: 'LED 屏幕'
+      }, {
+        value: 'LED 配件',
+        label: 'LED 配件'
+      }]
+    }, {
+      value: '互动设备',
+      label: '互动设备'
+    }, {
+      value: '中控系统',
+      label: '中控系统'
+    }, {
+      value: '网络系统',
+      label: '网络系统'
+    }, {
+      value: '装修工程',
+      label: '装修工程',
+      children: [{
+        value: '隔断基础',
+        label: '隔断基础'
+      }, {
+        value: '隔断饰面',
+        label: '隔断饰面'
+      }, {
+        value: '吊顶基础结构',
+        label: '吊顶基础结构'
+      }, {
+        value: '吊顶饰面',
+        label: '吊顶饰面'
+      }, {
+        value: '天花灯槽',
+        label: '天花灯槽'
+      }, {
+        value: '天花灯槽饰面',
+        label: '天花灯槽饰面'
+      }, {
+        value: '地面',
+        label: '地面'
+      }, {
+        value: '门基础结构',
+        label: '门基础结构'
+      }, {
+        value: '门饰面',
+        label: '门饰面'
+      }, {
+        value: '门配件',
+        label: '门配件'
+      }]
+    }, {
+      value: '道具',
+      label: '道具',
+      children: [{
+        value: '展柜',
+        label: '展柜',
+        children: [{
+          value: '展柜基础',
+          label: '展柜基础'
+        }, {
+          value: '展柜饰面',
+          label: '展柜饰面'
+        }]
+      }, {
+        value: '中岛台-沙盘底座',
+        label: '中岛台-沙盘底座',
+        children: [{
+          value: '沙盘底座基础',
+          label: '沙盘底座基础'
+        }, {
+          value: '沙盘底座饰面',
+          label: '沙盘底座饰面'
+        }]
+      }]
+    }, {
+      value: '装置',
+      label: '装置',
+      children: [{
+        value: '艺术装置',
+        label: '艺术装置'
+      }, {
+        value: '新媒体艺术装置',
+        label: '新媒体艺术装置'
+      }]
+    }, {
+      value: '陈列品',
+      label: '陈列品'
+    }, {
       value: '广告物料',
-      label: '广告物料'
+      label: '广告物料',
+      children: [{
+        value: '灯箱',
+        label: '灯箱'
+      }, {
+        value: '艺术字-画底座',
+        label: '艺术字-画底座'
+      }, {
+        value: '广告画',
+        label: '广告画'
+      }]
     }, {
-      value: '模型',
-      label: '模型'
+      value: '软装摆设',
+      label: '软装摆设'
     }, {
-      value: '艺术装置',
-      label: '艺术装置'
-    }, {
-      value: '配件',
-      label: '配件'
-    }, {
-      value: '程序',
-      label: '程序'
-    }, {
-      value: '视频',
-      label: '视频'
+      value: '软体制作',
+      label: '软体制作',
+      children: [{
+        value: '数字影片制作费',
+        label: '数字影片制作费'
+      }, {
+        value: '互动程序开发',
+        label: '互动程序开发'
+      }, {
+        value: '后期维护',
+        label: '后期维护'
+      }]
+
     }]
     return productsclass
   },
