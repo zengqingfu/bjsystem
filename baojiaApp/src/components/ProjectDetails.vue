@@ -107,7 +107,7 @@
                 @change="handleChange"
                 clearable
                 filterable
-                style="width:46%;">
+                style="width:90%;">
               </el-cascader>
             </el-form-item>
             <el-input v-model="inputData" placeholder="请输入搜索内容" @input="play(inputData)" style="width:30%;float: right;margin-right:0px"></el-input>
@@ -136,10 +136,10 @@
               <el-cascader
                 :options="jsondata.listjson()"
                 :props="{ expandTrigger: 'hover' }"
-                @change="handleChange"
+                @change="handleChangetemplate"
                 clearable
                 filterable
-                style="width:46%;">
+                style="width:90%;">
               </el-cascader>
             </el-form-item>
             <el-input v-model="inputData" placeholder="请输入搜索内容" @input="templateplay(inputData)" style="width:30%;float: right;margin-right:0px"></el-input>
@@ -184,16 +184,73 @@
           <el-button @click="productsintbox = false">取消</el-button>
         </el-form>
     </el-dialog>
-    <h3  style="position: fixed;right: 100px;z-index: 99;top: 0px;margin: 10px;">
-      <el-button style="float: right; margin-left:15px;" @click="dialogFormVisible = true">修改</el-button>
-      <el-button style="float: right; margin-left:15px;" @click="subpushproductsbox = true">添加展项</el-button>
-      <el-button style="float: right;margin-right:0px" onclick="exportExcel('#projectdate')">点击导出</el-button>
+    <h3  style="position: relative;right: 0px;z-index: 99;top: 0px;margin: 0px;">
+      <el-button type="primary" style="float: right; margin-left:15px;" @click="dialogFormVisible = true">修改</el-button>
+      <el-button type="primary" style="float: right; margin-left:15px;" @click="subpushproductsbox = true">添加展项</el-button>
+      <el-button type="primary" style="float: right;margin-right:0px" onclick="exportExcel('#excelup')">点击导出</el-button>
     </h3>
-    <div class="titledivbox">
-      <table><tr><th colspan="8" ><h3 >总额：{{total_money}}</h3></th></tr></table>
+    <div id="excelup">
       <el-table :data="gongcheng" border show-summary :summary-method="jsondata.getSummaries" class="titletop" style="width: 100%">
         <el-table-column prop="category" label="类别" width="101"></el-table-column>
-        <el-table-column prop="name" label="名称" width="180"></el-table-column>
+        <el-table-column prop="name" label="名称" width="200"></el-table-column>
+        <el-table-column prop="brand" label="品牌" width="120"></el-table-column>
+        <el-table-column prop="productsintnb" label="数量" width="90"></el-table-column>
+        <el-table-column prop="unit" label="单位" width="70"></el-table-column>
+        <el-table-column prop="cost" label="成本单价(元)" width="130"></el-table-column>
+        <el-table-column prop="price" label="单价(元)" width="130"></el-table-column>
+        <el-table-column prop="money" label="小计(元)" width="140"></el-table-column>
+        <el-table-column prop="detail" label="工艺及材料说明"></el-table-column>
+        <el-table-column prop="content" label="备注" ></el-table-column>
+      </el-table>
+      <el-row v-for="item in subData" :key="item.id">
+        <table v-show="item.showtitle" style="width: -webkit-fill-available;background-color:rgb(1 82 144);">
+          <tr>
+            <th colspan="10" >
+              <h3 style="color:#fff;margin:8px 20px">{{item.name}}</h3>
+            </th>
+          </tr>
+        </table>
+        <table v-show="item.showsub" style="width: -webkit-fill-available;background-color:rgb(164 204 175)">
+          <tr>
+            <th colspan="10">
+              <p style="color:#fff;margin:8px 20px">{{item.projectclass}}</p>
+            </th>
+          </tr>
+        </table>
+        <el-table :show-header="false" :data="item.products" border show-summary :summary-method="jsondata.getSummaries"  style="width: 100%">
+          <el-table-column prop="category" label="类别" width="100"></el-table-column>
+          <el-table-column prop="name" label="名称" width="200"></el-table-column>
+          <el-table-column prop="brand" label="品牌" width="120"></el-table-column>
+          <el-table-column prop="productsintnb" label="数量" width="90"></el-table-column>
+          <el-table-column prop="unit" label="单位" width="70"></el-table-column>
+          <el-table-column prop="cost" label="成本单价(元)" width="130"></el-table-column>
+          <el-table-column prop="price" label="单价(元)" width="130"></el-table-column>
+          <el-table-column prop="money" label="小计(元)" width="140"></el-table-column>
+          <el-table-column prop="detail" label="工艺及材料说明"></el-table-column>
+          <el-table-column prop="content" label="备注" ></el-table-column>
+        </el-table>
+      </el-row>
+    </div>
+    <div class="titledivbox">
+      <table border="0" cellspacing="0" cellpadding="20">
+        <tr>
+          <th>
+            含税总额：{{comprehensive_money}}
+          </th>
+          <th>
+            工程造价：{{total_money}}
+          </th>
+          <th>
+            安装调试及运营维护费用2年：{{operate_money}}
+          </th>
+          <th>
+            税费：{{tax_money}}
+          </th>
+        </tr>
+      </table>
+      <el-table :data="gongcheng" border show-summary :summary-method="jsondata.getSummaries" class="titletop" style="width: 100%">
+        <el-table-column prop="category" label="类别" width="101"></el-table-column>
+        <el-table-column prop="name" label="名称" width="200"></el-table-column>
         <el-table-column prop="brand" label="品牌" width="120"></el-table-column>
         <el-table-column prop="productsintnb" label="数量" width="90"></el-table-column>
         <el-table-column prop="unit" label="单位" width="70"></el-table-column>
@@ -213,8 +270,20 @@
         <el-button @click="redsubproducts(item.id)">修改</el-button>
         <el-button @click="outerVisible = true, deleteprojectsub = item.id">删除</el-button>
       </div>
-      <table v-show="item.showtitle" style="width: -webkit-fill-available;background-color:rgb(1 82 144);"><tr><th colspan="1" ><h3 style="color:#fff;margin:8px 20px">{{item.name}}<span style="font-size:14px"> --- 导出单项</span></h3></th></tr></table>
-      <table v-show="item.showsub" style="width: -webkit-fill-available;background-color:rgb(164 204 175)"><tr><th colspan="1"><p style="color:#fff;margin:8px 20px">{{item.projectclass}}<span style="font-size:14px"> --- 导出单项</span></p></th></tr></table>
+        <table v-show="item.showtitle" style="width: -webkit-fill-available;background-color:rgb(1 82 144);">
+          <tr>
+            <th colspan="10" >
+              <h3 style="color:#fff;margin:8px 20px">{{item.name}}</h3>
+            </th>
+          </tr>
+        </table>
+        <table v-show="item.showsub" style="width: -webkit-fill-available;background-color:rgb(164 204 175)">
+          <tr>
+            <th colspan="10">
+              <p style="color:#fff;margin:8px 20px">{{item.projectclass}}</p>
+            </th>
+          </tr>
+        </table>
       <el-table :data="item.products" border show-summary :summary-method="jsondata.getSummaries"  style="width: 100%">
         <el-table-column prop="category" label="类别" width="100"></el-table-column>
         <el-table-column prop="name" label="名称" width="200">
@@ -284,6 +353,9 @@ export default {
     return {
       textarea1: '',
       total_money: 0,
+      operate_money: 0,
+      tax_money: 0,
+      comprehensive_money: 0,
       subredproductsred: {},
       subredproductsboxred: false,
       inputData: '',
@@ -407,6 +479,7 @@ export default {
             this.productspushdata[item] = ''
           }
         }
+        this.productspushdata.name = this.jsondata.stringreplace_up(this.productspushdata.name)
         this.productspushdata.detail = this.jsondata.stringreplace_up(this.productspushdata.detail)
         this.productspushdata.content = this.jsondata.stringreplace_up(this.productspushdata.content)
         this.productspushdata.productsintnb = Number(this.productsintnb)
@@ -421,6 +494,7 @@ export default {
               this.productstemplatedata[i][item] = ''
             }
           }
+          this.productstemplatedata[i].name = this.jsondata.stringreplace_up(this.productstemplatedata[i].name)
           this.productstemplatedata[i].detail = this.jsondata.stringreplace_up(this.productstemplatedata[i].detail)
           this.productstemplatedata[i].content = this.jsondata.stringreplace_up(this.productstemplatedata[i].content)
           this.productstemplatedata[i].productsintnb = Number(this.productsintnb)
@@ -442,6 +516,12 @@ export default {
       this.inputData = JSON.stringify(value)
       this.inputData = this.jsondata.classstrog(this.inputData)
       this.play(this.inputData)
+      // this.templateplay(this.inputData)
+    },
+    handleChangetemplate (value) {
+      this.inputData = JSON.stringify(value)
+      this.inputData = this.jsondata.classstrog(this.inputData)
+      // this.play(this.inputData)
       this.templateplay(this.inputData)
     },
     async getFormData () {
@@ -460,6 +540,9 @@ export default {
     },
     async getdata () {
       this.total_money = 0
+      this.operate_money = 0
+      this.tax_money = 0
+      this.comprehensive_money = 0
       this.form = await this.jsondata.getDataId('project', this.$route.params.id)
       this.projectsubData = await this.jsondata.getDataClass('projectsub', this.$route.params.id, 'projectid')
       this.subData = JSON.parse(JSON.stringify(this.projectsubData))
@@ -480,6 +563,7 @@ export default {
           this.subData[i].products[is].money = this.subData[i].products[is].price * this.subData[i].products[is].productsintnb
           this.total_money += this.subData[i].products[is].money
           this.subData[i].products[is].detail = this.jsondata.stringreplace_ld(this.subData[i].products[is].detail)// 格式化换行
+          this.subData[i].products[is].name = this.jsondata.stringreplace_ld(this.subData[i].products[is].name)// 格式化换行
           this.textarea1 = this.subData[i].products[is].detail
           this.subData[i].products[is].content = this.jsondata.stringreplace_ld(this.subData[i].products[is].content)// 格式化换行
           this.subData[i].products[is].money = this.jsondata.currency(this.subData[i].products[is].money, '￥', 2)
@@ -492,11 +576,20 @@ export default {
         this.subData[i].showsub = false
         if (i !== 0 && this.subData[i].name === this.subData[i - 1].name) {
           this.subData[i].showtitle = false
+          this.subData[i].name = '--#--'
         }
         if (this.subData[i].projectclass !== '') {
           this.subData[i].showsub = true
+        } else {
+          this.subData[i].projectclass = '--#--'
         }
       }
+      this.operate_money = this.total_money * 0.1
+      this.tax_money = (this.operate_money + this.total_money) * 0.09
+      this.comprehensive_money = this.tax_money + this.operate_money + this.total_money
+      this.comprehensive_money = this.jsondata.currency(this.comprehensive_money, '￥', 2)
+      this.operate_money = this.jsondata.currency(this.operate_money, '￥', 2)
+      this.tax_money = this.jsondata.currency(this.tax_money, '￥', 2)
       this.total_money = this.jsondata.currency(this.total_money, '￥', 2)
     },
     async updatpostData (list, formdata) { // 更新数据

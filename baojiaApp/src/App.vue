@@ -186,6 +186,7 @@ export default {
   overflow-y: scroll;
   border-bottom: 1px solid #eee;
   border-left: 1px solid #eee;
+  margin-right: -15px;
 }
 .titledivbox .el-table__body-wrapper{
   display:none;
@@ -193,12 +194,12 @@ export default {
 .titletop .is-scrolling-none{
   display: none;
 }
-#projectdate .el-table__header-wrapper {
+/* #projectdate .el-table__header-wrapper {
   display: none;
 }
 #projectdate .titletop .el-table__header-wrapper {
   display: block;
-}
+} */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -226,6 +227,9 @@ input[type="number"] {
 }
 .addlist .v-modal {
   display: none !important;
+}
+.el-cascader-menu__wrap{
+  height: auto !important;
 }
 @media screen and (max-width: 780px) {
   .el-menu--collapse {

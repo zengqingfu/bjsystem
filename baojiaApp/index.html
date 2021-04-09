@@ -68,16 +68,37 @@
                     }
                 }
             }
-        })
+        })                
+        wb.Sheets['Sheet JS']["!cols"] = [{
+            wpx: 70
+        }, {
+            wpx: 120
+        }, {
+            wpx: 70
+        }, {
+            wpx: 50
+        }, {
+            wpx: 50
+        }, {
+            wpx: 100
+        }, {
+            wpx: 80
+        }, {
+            wpx: 100
+        }, {
+            wpx: 250
+        }, {
+            wpx: 200
+        }];
         for (let R = range.s.r; R <= range.e.r; ++R) {
             let sytlebottom = 0;
             let sytletop = 0;
             for (let C = range.s.c; C <= range.e.c; ++C) {
                 let cell = { c: C, r: R };
                 let cell_ref = XLSX.utils.encode_cell(cell);
-                wb.Sheets['Sheet JS']["!cols"].push({wpx: 120})
+                // wb.Sheets['Sheet JS']["!cols"].push({wpx: 120})
                 if (wb.Sheets['Sheet JS'][cell_ref] != undefined) {
-                    if (wb.Sheets['Sheet JS'][cell_ref].v == "合计") {
+                    if (wb.Sheets['Sheet JS'][cell_ref].v == "N/A") {
                       sytlebottom = R
                     }
                     if (wb.Sheets['Sheet JS'][cell_ref].v == "收款分期" || wb.Sheets['Sheet JS'][cell_ref].v == "签约日期") {
@@ -86,6 +107,9 @@
                     if (wb.Sheets['Sheet JS'][cell_ref].v.match("￥")) {
                         wb.Sheets['Sheet JS'][cell_ref].v = Number(wb.Sheets['Sheet JS'][cell_ref].v.replace(/,|￥/g, ''))
                         wb.Sheets['Sheet JS'][cell_ref].t = "n"
+                    }
+                    if (wb.Sheets['Sheet JS'][cell_ref].v == "--#--") {
+                        delete wb.Sheets['Sheet JS'][cell_ref]
                     }
                 }
                 if (R == 0 || sytletop == R ) {
