@@ -82,15 +82,18 @@
         }, {
             wpx: 100
         }, {
-            wpx: 80
-        }, {
             wpx: 100
+        }, {
+            wpx: 150
         }, {
             wpx: 250
         }, {
             wpx: 200
         }];
         for (let R = range.s.r; R <= range.e.r; ++R) {
+            let sytleend = 0;
+            let sytletitle = 0;
+            let sytletitle1 = 0;
             let sytlebottom = 0;
             let sytletop = 0;
             for (let C = range.s.c; C <= range.e.c; ++C) {
@@ -98,19 +101,29 @@
                 let cell_ref = XLSX.utils.encode_cell(cell);
                 // wb.Sheets['Sheet JS']["!cols"].push({wpx: 120})
                 if (wb.Sheets['Sheet JS'][cell_ref] != undefined) {
-                    if (wb.Sheets['Sheet JS'][cell_ref].v == "N/A") {
+                    if (wb.Sheets['Sheet JS'][cell_ref].v == "N/A" || wb.Sheets['Sheet JS'][cell_ref].v == "合计") {
                       sytlebottom = R
                     }
                     if (wb.Sheets['Sheet JS'][cell_ref].v == "收款分期" || wb.Sheets['Sheet JS'][cell_ref].v == "签约日期") {
                       sytletop = R
                     }
+                    if (wb.Sheets['Sheet JS'][cell_ref].v.match("--1--") ) {
+                        sytletitle = R
+                    }
+                    if (wb.Sheets['Sheet JS'][cell_ref].v.match("--2--") ) {
+                        sytletitle1 = R
+                    }
+                    if (wb.Sheets['Sheet JS'][cell_ref].v.match("--3--") ) {
+                        sytleend = R
+                    }
+                    if (wb.Sheets['Sheet JS'][cell_ref].v.match("--3--") || wb.Sheets['Sheet JS'][cell_ref].v.match("--2--") || wb.Sheets['Sheet JS'][cell_ref].v.match("--1--")) {
+                        wb.Sheets['Sheet JS'][cell_ref].v = wb.Sheets['Sheet JS'][cell_ref].v.replace(/--3--|--2--|--1--/g,"")
+                    }
                     if (wb.Sheets['Sheet JS'][cell_ref].v.match("￥")) {
                         wb.Sheets['Sheet JS'][cell_ref].v = Number(wb.Sheets['Sheet JS'][cell_ref].v.replace(/,|￥/g, ''))
                         wb.Sheets['Sheet JS'][cell_ref].t = "n"
                     }
-                    if (wb.Sheets['Sheet JS'][cell_ref].v == "--#--") {
-                        delete wb.Sheets['Sheet JS'][cell_ref]
-                    }
+
                 }
                 if (R == 0 || sytletop == R ) {
                     wb.Sheets['Sheet JS'][cell_ref].s = {
@@ -133,12 +146,76 @@
                         },
                         border: borderStyle,
                     };
+                } else if (sytleend == R && wb.Sheets['Sheet JS'][cell_ref]) {
+                    wb.Sheets['Sheet JS'][cell_ref].s = {
+                        numFmt: "￥#,##0.00",
+                        fill: {
+                            fgColor: {
+                                rgb: "a3ccaf"
+                            }
+                        },
+                        alignment: {
+                            horizontal: "left",
+                            wrapText: true,
+                            vertical: "center"
+                        },
+                        font: {
+                            name: "黑体",
+                            sz: "13",
+                            bold: true,
+                            color: 000000,
+                            height: 20
+                        },
+                        border: borderStyle,
+                    };
+                } else if (sytletitle == R && wb.Sheets['Sheet JS'][cell_ref]) {
+                    wb.Sheets['Sheet JS'][cell_ref].s = {
+                        fill: {
+                            fgColor: {
+                                rgb: "50c6ff"
+                            }
+                        },
+                        alignment: {
+                            horizontal: "center",
+                            wrapText: true,
+                            vertical: "center"
+                        },
+                        font: {
+                            name: "黑体",
+                            sz: "13",
+                            bold: true,
+                            color: 000000,
+                            height: 20
+                        },
+                        border: borderStyle,
+                    };
+                } else if (sytletitle1 == R && wb.Sheets['Sheet JS'][cell_ref]) {
+                    wb.Sheets['Sheet JS'][cell_ref].s = {
+                        fill: {
+                            fgColor: {
+                                rgb: "a3ccaf"
+                            }
+                        },
+                        alignment: {
+                            horizontal: "center",
+                            wrapText: true,
+                            vertical: "center"
+                        },
+                        font: {
+                            name: "黑体",
+                            sz: "13",
+                            bold: true,
+                            color: 000000,
+                            height: 20
+                        },
+                        border: borderStyle,
+                    };
                 } else if( R == sytlebottom) {
                     wb.Sheets['Sheet JS'][cell_ref].s = {
                         numFmt: "￥#,##0.00",
                         fill: {
                             fgColor: {
-                                rgb: "87ab35"
+                                rgb: "eeeeee"
                             }
                         },
                         alignment: {

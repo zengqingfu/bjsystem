@@ -438,6 +438,10 @@ export default {
     const { columns, data } = param
     const sums = []
     columns.forEach((column, index) => {
+      if (index === 0) {
+        sums[index] = '合计'
+        return
+      }
       if (index !== 7) {
         sums[index] = 'N/A'
         return

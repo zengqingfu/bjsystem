@@ -189,7 +189,7 @@
       <el-button type="primary" style="float: right; margin-left:15px;" @click="subpushproductsbox = true">添加展项</el-button>
       <el-button type="primary" style="float: right;margin-right:0px" onclick="exportExcel('#excelup')">点击导出</el-button>
     </h3>
-    <div id="excelup">
+    <div id="excelup" v-show="false">
       <el-table :data="gongcheng" border show-summary :summary-method="jsondata.getSummaries" class="titletop" style="width: 100%">
         <el-table-column prop="category" label="类别" width="101"></el-table-column>
         <el-table-column prop="name" label="名称" width="200"></el-table-column>
@@ -203,17 +203,17 @@
         <el-table-column prop="content" label="备注" ></el-table-column>
       </el-table>
       <el-row v-for="item in subData" :key="item.id">
-        <table v-show="item.showtitle" style="width: -webkit-fill-available;background-color:rgb(1 82 144);">
+        <table v-if="item.showtitle" style="width: -webkit-fill-available;background-color:rgb(1 82 144);">
           <tr>
-            <th colspan="10" >
-              <h3 style="color:#fff;margin:8px 20px">{{item.name}}</h3>
+            <th colspan="11" >
+              <h3 style="color:#fff;margin:8px 20px">{{item.name}}--1--</h3>
             </th>
           </tr>
         </table>
-        <table v-show="item.showsub" style="width: -webkit-fill-available;background-color:rgb(164 204 175)">
+        <table v-if="item.showsub" style="width: -webkit-fill-available;background-color:rgb(164 204 175)">
           <tr>
-            <th colspan="10">
-              <p style="color:#fff;margin:8px 20px">{{item.projectclass}}</p>
+            <th colspan="11">
+              <p style="color:#fff;margin:8px 20px">{{item.projectclass}}--2--</p>
             </th>
           </tr>
         </table>
@@ -230,6 +230,40 @@
           <el-table-column prop="content" label="备注" ></el-table-column>
         </el-table>
       </el-row>
+      <table style="width: -webkit-fill-available;background-color:rgb(1 82 144);">
+        <tr>
+          <th colspan="2" >
+            <h3 style="color:#fff;margin:8px 20px">工程造价：--3--</h3>
+          </th>
+          <th colspan="9" >
+            <h3 style="color:#fff;margin:8px 20px">{{comprehensive_money}}--3--</h3>
+          </th>
+        </tr>
+        <tr>
+          <th colspan="2" >
+            <h3 style="color:#fff;margin:8px 20px">安装调试运营维护费：--3--</h3>
+          </th>
+          <th colspan="9" >
+            <h3 style="color:#fff;margin:8px 20px">{{operate_money}}--3--</h3>
+          </th>
+        </tr>
+        <tr>
+          <th colspan="2" >
+            <h3 style="color:#fff;margin:8px 20px">税费：--3--</h3>
+          </th>
+          <th colspan="9" >
+            <h3 style="color:#fff;margin:8px 20px">{{tax_money}}--3--</h3>
+          </th>
+        </tr>
+        <tr>
+          <th colspan="2" >
+            <h3 style="color:#fff;margin:8px 20px">含税总额：--3--</h3>
+          </th>
+          <th colspan="9" >
+            <h3 style="color:#fff;margin:8px 20px">{{comprehensive_money}}--3--</h3>
+          </th>
+        </tr>
+      </table>
     </div>
     <div class="titledivbox">
       <table border="0" cellspacing="0" cellpadding="20">
@@ -270,14 +304,14 @@
         <el-button @click="redsubproducts(item.id)">修改</el-button>
         <el-button @click="outerVisible = true, deleteprojectsub = item.id">删除</el-button>
       </div>
-        <table v-show="item.showtitle" style="width: -webkit-fill-available;background-color:rgb(1 82 144);">
+        <table v-if="item.showtitle" style="width: -webkit-fill-available;background-color:rgb(1 82 144);">
           <tr>
             <th colspan="10" >
               <h3 style="color:#fff;margin:8px 20px">{{item.name}}</h3>
             </th>
           </tr>
         </table>
-        <table v-show="item.showsub" style="width: -webkit-fill-available;background-color:rgb(164 204 175)">
+        <table v-if="item.showsub" style="width: -webkit-fill-available;background-color:rgb(164 204 175)">
           <tr>
             <th colspan="10">
               <p style="color:#fff;margin:8px 20px">{{item.projectclass}}</p>
@@ -308,12 +342,12 @@
         </el-table-column>
         <el-table-column label="成本单价(元)" width="130">
           <template slot-scope="scope">
-            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].cost = scope.row.cost; changeInput(projectsubData[item.indexid])" v-model="scope.row.cost"><i slot="prefix" class="el-input__icon">￥</i></el-input>
+            <el-input type="number" @input="changeInput(projectsubData[item.indexid])" v-model="projectsubData[item.indexid].products[scope.$index].cost"><i slot="prefix" class="el-input__icon">￥</i></el-input>
           </template>
         </el-table-column>
         <el-table-column label="单价(元)" width="130">
           <template slot-scope="scope">
-            <el-input type="number" @input="projectsubData[item.indexid].products[scope.$index].price = scope.row.price; changeInput(projectsubData[item.indexid])" v-model="scope.row.price" ><i slot="prefix" class="el-input__icon">￥</i></el-input>
+            <el-input type="number" @input="changeInput(projectsubData[item.indexid])" v-model="projectsubData[item.indexid].products[scope.$index].price" ><i slot="prefix" class="el-input__icon">￥</i></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="money" label="小计(元)" width="140">
@@ -567,8 +601,8 @@ export default {
           this.textarea1 = this.subData[i].products[is].detail
           this.subData[i].products[is].content = this.jsondata.stringreplace_ld(this.subData[i].products[is].content)// 格式化换行
           this.subData[i].products[is].money = this.jsondata.currency(this.subData[i].products[is].money, '￥', 2)
-          // this.subData[i].products[is].price = this.jsondata.currency(this.subData[i].products[is].price, '￥', 2)
-          // this.subData[i].products[is].cost = this.jsondata.currency(this.subData[i].products[is].cost, '￥', 2)
+          this.subData[i].products[is].price = this.jsondata.currency(this.subData[i].products[is].price, '￥', 2)
+          this.subData[i].products[is].cost = this.jsondata.currency(this.subData[i].products[is].cost, '￥', 2)
         }
       }
       for (let i = 0; i < this.subData.length; i++) {
@@ -576,12 +610,9 @@ export default {
         this.subData[i].showsub = false
         if (i !== 0 && this.subData[i].name === this.subData[i - 1].name) {
           this.subData[i].showtitle = false
-          this.subData[i].name = '--#--'
         }
         if (this.subData[i].projectclass !== '') {
           this.subData[i].showsub = true
-        } else {
-          this.subData[i].projectclass = '--#--'
         }
       }
       this.operate_money = this.total_money * 0.1
